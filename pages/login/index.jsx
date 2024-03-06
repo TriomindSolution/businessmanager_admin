@@ -14,7 +14,7 @@ const LogIn = () => {
   const notify = React.useCallback((type, message) => {
     ToastMessage({ type, message });
   }, []);
-  const { http, setToken, token } = Axios();
+  const { http, setToken,saveToken, token } = Axios();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,7 +28,7 @@ const LogIn = () => {
       const login = await post(SECURITY_END_POINT.login(), {  email: email,password: password });
       // console.log(login);
       // return; 
-      setToken(login.data.access_token);
+      saveToken(login.data.user,login.data.access_token);
       notify("success", "successfully Login!");
 
     } catch (error) {

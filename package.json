@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.3.1",
+    "antd": "^5.15.1",
     "apexcharts": "^3.46.0",
     "axios": "^1.6.7",
     "next": "13.4.12",

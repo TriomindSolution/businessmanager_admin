@@ -7,7 +7,7 @@ import Loader from '../components/common/Loader';
 import '../styles/globals.css';
 import Axios from '../utils/axios';
 import LogIn from './login';
-
+import ThemeContext from "../components/context/themeContext";
 const MyApp = ({ Component, pageProps }) => {
   const [loading, setLoading] = useState(true);
 
@@ -16,7 +16,7 @@ const MyApp = ({ Component, pageProps }) => {
   }, []);
 
   const { http, token, logout } = Axios();
-
+  const providerValues = {};
 
   if (typeof window !== undefined) {
     if (!token) {
@@ -55,6 +55,7 @@ const MyApp = ({ Component, pageProps }) => {
         <Loader />
       ) : (
         <>
+        <ThemeContext.Provider value={providerValues}>
           <Layout>
             <Component {...pageProps} />
             <ToastContainer
@@ -70,7 +71,7 @@ const MyApp = ({ Component, pageProps }) => {
 
 
           </Layout>
-
+          </ThemeContext.Provider>
         </>
       )}
     </>
