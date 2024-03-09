@@ -1,7 +1,7 @@
 export const SELLER_END_POINT = {
-    create: () => `seller/store`,
-    update: (id) => `seller/update/${id}`,
-    list: (page, limit) => `/seller-list?limit=${limit}`,
-    info: (id) => `seller/${id}`,
-    delete:(id) => `seller/delete/${id}`,
+    create: () => `${process.env.NEXT_PUBLIC_API_URL}/seller/store`,
+    update: (id) => `${process.env.NEXT_PUBLIC_API_URL}/seller/update/${id}`,
+    list: (limit) => `${process.env.NEXT_PUBLIC_API_URL}/seller-list?limit=${limit}`,
+    info: (id) => `${process.env.NEXT_PUBLIC_API_URL}/seller/${id}`,
+    delete:(id) => `${process.env.NEXT_PUBLIC_API_URL}/seller/delete/${id}`,
 }   
