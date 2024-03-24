@@ -1,5 +1,5 @@
 
-const ViewSeller = ({ isOpen, onClose, data, isParentRender }) => {
+const ViewExpense = ({ isOpen, onClose, data, isParentRender }) => {
 
     return (
         <>
@@ -20,15 +20,12 @@ const ViewSeller = ({ isOpen, onClose, data, isParentRender }) => {
 
 
                                     <h5 className="mb-4 text-2xl font-bold tracking-tight text-gray-900 border-0 border-b-2">
-                                    Seller Details
+                                    Expense Details
                                     </h5>
 
                                     <div class="grid  bg-white  dark:border-strokedark dark:bg-boxdark  gap-x-8 gap-y-4 lg:grid-cols-2 sm:grid-cols-1">
-                                        <div> <span className='font-bold'>Name:</span>{data?.name}</div>
-                                        <div> <span className='font-bold'>Phone: </span>{data?.phone}</div>
-                                        <div> <span className='font-bold'>Email:</span>{data?.email}</div>
-                                        <div> <span className='font-bold'>Address: </span>{data?.address}</div>
-                                        <div> <span className='font-bold'>Description: </span>{data?.description}</div>
+                                        <div> <span className='font-bold'>Name:</span>Name</div>
+                                        <div> <span className='font-bold'>Phone: </span>Details</div>
                                     </div>
                                 </div>
                             </div>
@@ -41,4 +38,4 @@ const ViewSeller = ({ isOpen, onClose, data, isParentRender }) => {
     )
 }
 
-export default ViewSeller
+export default ViewExpense

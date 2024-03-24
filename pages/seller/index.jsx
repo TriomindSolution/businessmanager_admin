@@ -84,7 +84,8 @@ const Seller = () => {
 
   const fetchSellerList = async () => {
     try {
-      const response = await http.get(SELLER_END_POINT.list(limit));
+      // const response = await http.get(SELLER_END_POINT.list(page,limit));
+      const response = await http.get(SELLER_END_POINT.list());
       setSellerList(response.data?.data?.data);
       setLoading(false);
     } catch (error) {
