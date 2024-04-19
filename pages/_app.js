@@ -1,22 +1,29 @@
-'use client'
-import { useEffect, useState } from 'react';
+import Layout from "@/components/Layout";
+import { useEffect, useState } from "react";
+import "../public/assets/css/tailwind2.css";
+import Axios from "@/utils/axios";
+import Loader from "@/components/common/Loader";
+import Login from "./login";
 import { Slide, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import Layout from '../components/Layout';
-import Loader from '../components/common/Loader';
-import '../styles/globals.css';
-import Axios from '../utils/axios';
-import LogIn from './login';
-import ThemeContext from "../components/context/themeContext";
+
 const MyApp = ({ Component, pageProps }) => {
+  const [isMounted, setIsMounted] = useState(false);
+  const { http, token, logout } = Axios();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 1000);
   }, []);
 
-  const { http, token, logout } = Axios();
-  const providerValues = {};
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null;
+  }
+
 
   if (typeof window !== undefined) {
     if (!token) {
@@ -27,8 +34,8 @@ const MyApp = ({ Component, pageProps }) => {
             <Loader />
           ) : (
             <>
-            
-              <LogIn />
+
+              <Login />
 
               <ToastContainer
                 position="top-right"
@@ -47,15 +54,14 @@ const MyApp = ({ Component, pageProps }) => {
     }
   }
 
+
   return (
     <>
-
-
       {loading ? (
         <Loader />
       ) : (
         <>
-        <ThemeContext.Provider value={providerValues}>
+
           <Layout>
             <Component {...pageProps} />
             <ToastContainer
@@ -68,16 +74,11 @@ const MyApp = ({ Component, pageProps }) => {
               pauseOnHover
               transition={Slide}
             />
-
-
           </Layout>
-          </ThemeContext.Provider>
         </>
       )}
     </>
-  );
 
+  )
 }
-
-
 export default MyApp;

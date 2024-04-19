@@ -1,13 +1,10 @@
 import React, { useEffect, useState, useCallback } from "react";
-import Link from "next/link";
-import { get } from "@/helpers/api_helper";
-import ToastMessage from "@/components/Toast";
-import Axios from "@/utils/axios";
-import { Row, Table, Tag } from "antd";
-import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
-import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { EXPENSECATEGORY_END_POINT } from "@/constants";
+import Axios from "@/utils/axios";
+import DeleteIcon from "@/components/elements/DeleteIcon";
+import EditIcon from "@/components/elements/EditIcon";
+import ViewIcon from "@/components/elements/ViewIcon";
+import DataTable from "react-data-table-component";
 import ExpenseCategoryForm from "./ExpenseCategoryForm";
 import DeleteExpenseCategory from "./DeleteExpenseCategory";
 
@@ -27,6 +24,7 @@ const ExpenseCategory = () => {
     const [isDeleteModalOpen, setDeleteIsModalOpen] = useState(false);
 
     /*** Storing data end */
+
 
     /**Add function  start */
     const handleAdd = () => {
@@ -51,6 +49,7 @@ const ExpenseCategory = () => {
 
     /** Delete function start */
     const handleDelete = (data) => {
+        console.log("clcik")
         setEditData(data);
         setDeleteIsModalOpen(true);
     };
@@ -73,7 +72,7 @@ const ExpenseCategory = () => {
     const fetchExpenseCategoryList = async () => {
         try {
             const response = await http.get(EXPENSECATEGORY_END_POINT.list());
-            setExpenseCategoryList(response.data?.data?.data);
+            setExpenseCategoryList(response.data?.data);
             setLoading(false);
         } catch (error) {
             console.error('Error fetching seller list:', error);
@@ -85,72 +84,52 @@ const ExpenseCategory = () => {
         fetchExpenseCategoryList();
         return () => {
         };
-    }, [limit]);
+    }, []);
 
     /***Fetching table Data end */
 
 
 
-    /**Table Column Start */
     const columns = [
         {
-            title: "SL",
-            fixed: "left",
-            render: (text, record, index) => index + 1,
+            name: "SL",
+            selector: (row, index) => index + 1,
+            sortable: true,
         },
         {
-            title: "Name",
-            dataIndex: "name",
+            name: "Name",
+            selector: (row) => row.name,
+            sortable: true,
         },
         {
-            title: "Status",
-            dataIndex: "status",
-            render: (status) => {
-                const statusText = status === "1" ? "Active" : "Inactive";
-                const color = status === "1" ? "green" : "red";
-                return <span style={{ color }}>{statusText}</span>;
-            },
-        },
-        {
-            title: "Created By",
-            dataIndex: "created_by",
-        },
-        {
-            title: "Created At",
-            dataIndex: "created_at",
-        },
-        {
-            title: "Action",
-            key: "action",
-            fixed: "right",
-            width: 100,
-            render: (row) => actionButton(row),
-        },
+            name: "Created By",
+            selector: (row) => row.created_by,
+            sortable: true,
+        },{
+            name: "Action",
+            selector: (row) => actionButton(row),
+        }
+
+
     ];
-
-
-    /**Table Column End */
 
 
     const actionButton = (row) => {
         return (
             <>
-                <Row
-                    justify="space-between"
-                    style={{ display: "flex", alignItems: "center" }}
-                >
-                    <a onClick={() => handleView(row)} style={{ color: "green" }}>
-                        <EyeOutlined style={{ fontSize: "22px" }} />
-                    </a>
+                <ul className="action flex list-none p-0">
+                    
+                    <li className="m-2" onClick={() => handleEdit(row)}>
+                        <EditIcon  />
+                    </li>
+                    <li  className="m-2">
+                        <ViewIcon />
+                    </li>
+                    <li className="m-2" onClick={() => handleDelete(row)}>
+                        <DeleteIcon  />
+                    </li>
 
-                    <a onClick={() => handleEdit(row)} className="text-primary">
-                        <EditOutlined style={{ fontSize: "22px" }} />
-                    </a>
-
-                    <a onClick={() => handleDelete(row)} className="text-danger">
-                        <DeleteOutlined style={{ fontSize: "22px" }} />
-                    </a>
-                </Row>
+                </ul>
             </>
         );
     };
@@ -158,39 +137,83 @@ const ExpenseCategory = () => {
 
 
     return (
-        <div className="flex flex-col gap-10">
-            <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-                <div className="py-6 px-4 md:px-6 xl:px-7.5 flex justify-between items-center border-b border-stroke dark:border-strokedark">
-                    <h4 className="text-xl font-semibold text-black dark:text-white">
-                        All Expensecategory
-                    </h4>
-                    <button
-                        href="#"
-                        className="inline-flex items-center justify-center rounded-full bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
-                        onClick={handleAdd}
-                    >
-                        Add
-                        <span className="button-icon-space ml-5">
-                            <FontAwesomeIcon icon={faPlusCircle} />
-                        </span>
-                    </button>
+        <>
+        <div
+            style={{ marginLeft: "16.25rem" }}
+            className="relative min-h-screen group-data-[sidebar-size=sm]:min-h-sm"
+        >
+
+            <div className="group-data-[sidebar-size=lg]:ltr:md:ml-vertical-menu group-data-[sidebar-size=lg]:rtl:md:mr-vertical-menu group-data-[sidebar-size=md]:ltr:ml-vertical-menu-md group-data-[sidebar-size=md]:rtl:mr-vertical-menu-md group-data-[sidebar-size=sm]:ltr:ml-vertical-menu-sm group-data-[sidebar-size=sm]:rtl:mr-vertical-menu-sm pt-[calc(theme('spacing.header')_*_1)] pb-[calc(theme('spacing.header')_*_0.8)] px-4 group-data-[navbar=bordered]:pt-[calc(theme('spacing.header')_*_1.3)] group-data-[navbar=hidden]:pt-0 group-data-[layout=horizontal]:mx-auto group-data-[layout=horizontal]:max-w-screen-2xl group-data-[layout=horizontal]:px-0 group-data-[layout=horizontal]:group-data-[sidebar-size=lg]:ltr:md:ml-auto group-data-[layout=horizontal]:group-data-[sidebar-size=lg]:rtl:md:mr-auto group-data-[layout=horizontal]:md:pt-[calc(theme('spacing.header')_*_1.6)] group-data-[layout=horizontal]:px-3 group-data-[layout=horizontal]:group-data-[navbar=hidden]:pt-[calc(theme('spacing.header')_*_0.9)]">
+                <div className="container-fluid group-data-[content=boxed]:max-w-boxed mx-auto">
+                    <div className="gap-2 py-4 ">
+                        <div className="col-span-12 card 2xl:col-span-12">
+                            <div className="card-body">
+                                <div className="grid items-center grid-cols-1 gap-3 mb-5 2xl:grid-cols-12">
+                                    <div className="2xl:col-span-3">
+                                        <h6 className="text-15">Expense category</h6>
+                                    </div>
+                                    {/*end col*/}
+                                    <div className="2xl:col-span-3 2xl:col-start-10">
+                                        <div className="flex gap-3">
+                                            <div className="relative grow">
+                                                <input
+                                                    type="text"
+                                                    className="ltr:pl-8 rtl:pr-8 search form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
+                                                    placeholder="Search for ..."
+                                                    autoComplete="off"
+                                                />
+                                                <i
+                                                    data-lucide="search"
+                                                    className="inline-block size-4 absolute ltr:left-2.5 rtl:right-2.5 top-2.5 text-slate-500 dark:text-zink-200 fill-slate-100 dark:fill-zink-600"
+                                                />
+                                            </div>
+                                            <button
+                                                type="button"
+                                                className="text-white btn bg-custom-500 border-custom-500 hover:text-white hover:bg-custom-600 hover:border-custom-600 focus:text-white focus:bg-custom-600 focus:border-custom-600 focus:ring focus:ring-custom-100 active:text-white active:bg-custom-600 active:border-custom-600 active:ring active:ring-custom-100 dark:ring-custom-400/20"
+                                                onClick={handleAdd}
+                                            >
+                                                <i className="align-baseline ltr:pr-1 rtl:pl-1 ri-download-2-line" />
+                                                Add
+                                            </button>
+                                        </div>
+                                    </div>
+                                    {/*end col*/}
+                                </div>
+                                {/*end grid*/}
+                                <div className="overflow-x-auto">
+                                    <div className="w-full whitespace-nowrap dark:text-zink-200 dark:bg-zink-600">
+                                        <DataTable
+                                            columns={columns}
+                                            data={expenseCategoryList}
+                                            pagination
+                                            highlightOnHover
+                                            subHeader
+                                            subHeaderComponent={
+                                                <input
+                                                    type="text"
+                                                    placeholder="search..."
+                                                    className="w-25 form-control"
+                                                // value={search}
+                                                // onChange={(e) => setSearch(e.target.value)}
+                                                />
+                                            }
+                                            striped
+                                        />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <ExpenseCategoryForm isOpen={isModalOpen} onClose={closeModal} setEditData={editData} isParentRender={reFetchHandler} />
-                <DeleteExpenseCategory isOpen={isDeleteModalOpen} onClose={closeDeleteModal} data={editData} isParentRender={reFetchHandler} />
-                {/* <ViewSeller isOpen={isViewModalOpen} onClose={closeViewDeleteModal} data={editData} isParentRender={reFetchHandler} /> */}
-
-                <Table
-                    className="border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark text-black dark:text-white"
-                    columns={columns}
-                    dataSource={expenseCategoryList}
-                    scroll={{ x: "max-content" }}
-
-                />
-
-
-
             </div>
+
+
         </div>
+        <ExpenseCategoryForm isOpen={isModalOpen} onClose={closeModal} setEditData={editData} isParentRender={reFetchHandler} />
+        <DeleteExpenseCategory isOpen={isDeleteModalOpen} onClose={closeDeleteModal} data={editData} isParentRender={reFetchHandler} />
+
+        </>
     )
 }
 

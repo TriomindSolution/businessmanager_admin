@@ -1,8 +1,7 @@
+import React, { useCallback, useEffect, useState } from "react";
+import Axios from "@/utils/axios";
 import ToastMessage from "@/components/Toast";
 import { EXPENSECATEGORY_END_POINT } from "@/constants";
-import { post, put } from "@/helpers/api_helper";
-import Axios from "@/utils/axios";
-import React, { useCallback, useEffect, useState } from "react";
 
 const ExpenseCategoryForm = ({ isOpen, onClose, setEditData, isParentRender }) => {
     const { http } = Axios();
@@ -15,10 +14,12 @@ const ExpenseCategoryForm = ({ isOpen, onClose, setEditData, isParentRender }) =
         status: "",
     });
 
+    console.log("expenseCategory", expenseCategory)
+
 
     useEffect(() => {
         if (setEditData === null) {
-            setExpenseCategory({ name: "", address: "", phone: "", email: "", description: "", status: null, });
+            setExpenseCategory({ name: "", status: null });
         } else {
             setExpenseCategory({
                 id: setEditData.id || "",
@@ -78,118 +79,115 @@ const ExpenseCategoryForm = ({ isOpen, onClose, setEditData, isParentRender }) =
 
     return (
         <>
-            {isOpen && (
-                <div className="fixed inset-0 z-10 overflow-y-auto ">
-                    <div className="flex items-center justify-center min-h-screen">
-                        <div className="fixed inset-0 bg-black opacity-50"></div>
-                        <div className="relative bg-white p-8 md:p-1 rounded-lg dark:border-strokedark dark:bg-boxdark w-full max-w-xl max-h-full">
-                            {/* Modal content */}
-                            <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                                    {setEditData?._id ? "Update" : "Create New"}
-                                </h3>
-                                <button
-                                    onClick={() => {
-                                        onClose();
-                                        setExpenseCategory({});
-                                    }}
-                                    type="button"
-                                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                    data-modal-toggle="crud-modal"
-                                >
-                                    <svg
-                                        className="w-3 h-3"
-                                        aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 14 14"
+            <div
+                style={{ marginLeft: "16.25rem" }}
+                className="relative min-h-screen group-data-[sidebar-size=sm]:min-h-sm"
+            >
+
+                <div className="group-data-[sidebar-size=lg]:ltr:md:ml-vertical-menu group-data-[sidebar-size=lg]:rtl:md:mr-vertical-menu group-data-[sidebar-size=md]:ltr:ml-vertical-menu-md group-data-[sidebar-size=md]:rtl:mr-vertical-menu-md group-data-[sidebar-size=sm]:ltr:ml-vertical-menu-sm group-data-[sidebar-size=sm]:rtl:mr-vertical-menu-sm pt-[calc(theme('spacing.header')_*_1)] pb-[calc(theme('spacing.header')_*_0.8)] px-4 group-data-[navbar=bordered]:pt-[calc(theme('spacing.header')_*_1.3)] group-data-[navbar=hidden]:pt-0 group-data-[layout=horizontal]:mx-auto group-data-[layout=horizontal]:max-w-screen-2xl group-data-[layout=horizontal]:px-0 group-data-[layout=horizontal]:group-data-[sidebar-size=lg]:ltr:md:ml-auto group-data-[layout=horizontal]:group-data-[sidebar-size=lg]:rtl:md:mr-auto group-data-[layout=horizontal]:md:pt-[calc(theme('spacing.header')_*_1.6)] group-data-[layout=horizontal]:px-3 group-data-[layout=horizontal]:group-data-[navbar=hidden]:pt-[calc(theme('spacing.header')_*_0.9)]">
+                    <div className="container-fluid group-data-[content=boxed]:max-w-boxed mx-auto">
+                        <div className="gap-2 ">
+                            <div className="col-span-12 card 2xl:col-span-12">
+
+                                {isOpen && (
+                                    <div
+                                        id="largeModal"
+                                        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                                    // onClick={() => {
+                                    //     onClose();
+                                    //     setExpense({});
+                                    // }}
                                     >
-                                        <path
-                                            stroke="currentColor"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                                        />
-                                    </svg>
-                                    <span className="sr-only">Close modal</span>
-                                </button>
+                                        <div className="fixed flex flex-col items-center justify-center left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white shadow-md rounded-md dark:bg-zink-600">
+                                            <div className="w-screen md:w-[40rem] bg-white shadow rounded-md dark:bg-zink-600 flex flex-col">
+                                                <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-zink-500">
+                                                    <h5 className="text-16">Expense Category</h5>
+                                                    <button
+                                                        onClick={() => {
+                                                            onClose();
+                                                        }}
+                                                        className="transition-all duration-200 ease-linear text-slate-500 hover:text-red-500 dark:text-zink-200 dark:hover:text-red-500"
+                                                    >
+                                                        <i data-lucide="x" className="size-5" />
+                                                    </button>
+                                                </div>
+                                                <div className="mx-auto md:max-w-lg">
+                                                    <form action="#!" id="signUp" >
+                                                        <div className="grid grid-cols-1 gap-x-5 xl:grid-cols-2">
+                                                            <div className="mb-4">
+                                                                <label
+                                                                    htmlFor="firstNameInput"
+                                                                    className="inline-block mb-2 text-base font-medium"
+                                                                >
+                                                                    Name <span className="text-red-500">*</span>
+                                                                </label>
+                                                                <input
+                                                                    type="text"
+                                                                    id="firstNameInput"
+                                                                    className="form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
+                                                                    placeholder="name"
+                                                                    name="name"
+                                                                    defaultValue={expenseCategory?.name}
+                                                                    onChange={handleChange}
+                                                                />
+                                                                <p id="firstNameError" className="mt-1 text-sm text-red-500" />
+                                                            </div>
+                                                            <div className="mb-4">
+                                                                <label
+                                                                    htmlFor="lastNameInput"
+                                                                    className="inline-block mb-2 text-base font-medium"
+                                                                >
+                                                                   Status <span className="text-red-500">*</span>
+                                                                </label>
+                                                                <select
+                                                                    name="status"
+                                                                    onChange={handleChange}
+                                                                    value={expenseCategory?.status}
+                                                                    className="form-select border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200">
+                                                                    <option selected="">Select category</option>
+                                                                    <option value="1">Active</option>
+                                                                    <option value="2">Inactive</option>
+                                                                </select>
+
+                                                                <p id="lastNameError" className="mt-1 text-sm text-red-500" />
+                                                            </div>
+                                                        </div>
+
+                                                    </form>
+                                                </div>
+
+                                                <div className="flex justify-end gap-2 mt-5 p-4 mt-auto border-t border-slate-200 dark:border-zink-500">
+                                                    <button
+                                                        type="button"
+                                                        className="text-red-500 bg-white btn hover:text-red-500 hover:bg-red-100 focus:text-red-500 focus:bg-red-100 active:text-red-500 active:bg-red-100 dark:bg-zink-700 dark:hover:bg-red-500/10 dark:focus:bg-red-500/10 dark:active:bg-red-500/10"
+                                                        onClick={() => {
+                                                            onClose();
+                                                        }}
+                                                    >
+                                                        <i data-lucide="x" className="inline-block size-4" />{" "}
+                                                        <span className="align-middle">Cancel</span>
+                                                    </button>
+                                                    <button
+                                                        type="submit"
+                                                        className="text-white btn bg-custom-500 border-custom-500 hover:text-white hover:bg-custom-600 hover:border-custom-600 focus:text-white focus:bg-custom-600 focus:border-custom-600 focus:ring focus:ring-custom-100 active:text-white active:bg-custom-600 active:border-custom-600 active:ring active:ring-custom-100 dark:ring-custom-400/20"
+                                                        onClick={handleSubmit}
+                                                    >
+                                                        Submit
+                                                    </button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
                             </div>
-                            {/* Your modal content goes here */}
-                            <form onSubmit={handleSubmit} className="p-4 md:p-5">
-                                <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                                    <div className="w-full ">
-                                        <label
-                                            htmlFor="name"
-                                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                        >
-                                            Name
-                                        </label>
-                                        <input
-                                            type="text"
-                                            name="name"
-                                            id="name"
-                                            className="bg-gray border-stroke border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                                            placeholder="Type Seller name"
-                                            required=""
-                                            defaultValue={expenseCategory?.name}
-                                            onChange={handleChange}
-                                        />
-                                    </div>
-
-       
-                                </div>
-                                <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                                   
-
-                                    <div className="w-full">
-                                        <label
-                                            htmlFor="status"
-                                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                        >
-                                            Status
-                                        </label>
-                                        <select
-                                            name="status"
-                                            id="status"
-                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500  dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                                            onChange={handleChange}
-                                            value={expenseCategory?.status}
-                                        >
-                                            <option selected="">Select category</option>
-                                            <option value="1">Active</option>
-                                            <option value="2">Inactive</option>
-                                        </select>
-                                    </div>
-                                </div>
-                               
-                                <div className="ml-auto">
-                                    <button
-                                        type="submit"
-                                        className="text-white inline-flex items-center bg-primary hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                    >
-                                        <svg
-                                            className="me-1 -ms-1 w-5 h-5"
-                                            fill="currentColor"
-                                            viewBox="0 0 20 20"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                fillRule="evenodd"
-                                                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                                                clipRule="evenodd"
-                                            />
-                                        </svg>
-                                        {expenseCategory?.id ? "Update" : "Create New"}
-
-                                        {/* Add new Seller */}
-                                    </button>
-                                </div>
-                            </form>
                         </div>
                     </div>
                 </div>
-            )}
+
+
+            </div>
         </>
     );
 };

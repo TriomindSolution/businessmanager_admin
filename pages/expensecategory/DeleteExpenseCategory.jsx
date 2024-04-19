@@ -31,32 +31,75 @@ const DeleteExpenseCategory = ({ isOpen, onClose, data, isParentRender }) => {
     
     return (
         <>
-            {isOpen && (
-                <div className="fixed inset-0 z-10 overflow-y-auto">
-                    <div className="flex items-center justify-center min-h-screen">
-                        <div className="fixed inset-0 bg-black opacity-25"></div>
-                        <div className="relative bg-white p-8 rounded-lg  dark:border-strokedark dark:bg-boxdark w-full max-w-md max-h-full">
-                            {/* Modal content */}
-                            <div class="relative p-4 text-center bg-white ">
-                                <button onClick={onClose} type="button" class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="deleteModal">
-                                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                                    <span class="sr-only">Close modal</span>
-                                </button>
-                                <svg class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
-                                <p class="mb-4 text-gray-500 dark:text-gray-300">Are you sure you want to Delete ?</p>
-                                <div class="flex justify-center items-center space-x-4">
-                                    <button onClick={onClose} data-modal-toggle="deleteModal" type="button" class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
-                                        No, cancel
-                                    </button>
-                                    <button onClick={deleteData} type="submit" class="py-2 px-3 text-sm font-medium text-center text-white bg-danger rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
-                                        Yes, Im sure
-                                    </button>
-                                </div>
+            <div
+                style={{ marginLeft: "16.25rem" }}
+                className="relative min-h-screen group-data-[sidebar-size=sm]:min-h-sm"
+            >
+
+                <div className="group-data-[sidebar-size=lg]:ltr:md:ml-vertical-menu group-data-[sidebar-size=lg]:rtl:md:mr-vertical-menu group-data-[sidebar-size=md]:ltr:ml-vertical-menu-md group-data-[sidebar-size=md]:rtl:mr-vertical-menu-md group-data-[sidebar-size=sm]:ltr:ml-vertical-menu-sm group-data-[sidebar-size=sm]:rtl:mr-vertical-menu-sm pt-[calc(theme('spacing.header')_*_1)] pb-[calc(theme('spacing.header')_*_0.8)] px-4 group-data-[navbar=bordered]:pt-[calc(theme('spacing.header')_*_1.3)] group-data-[navbar=hidden]:pt-0 group-data-[layout=horizontal]:mx-auto group-data-[layout=horizontal]:max-w-screen-2xl group-data-[layout=horizontal]:px-0 group-data-[layout=horizontal]:group-data-[sidebar-size=lg]:ltr:md:ml-auto group-data-[layout=horizontal]:group-data-[sidebar-size=lg]:rtl:md:mr-auto group-data-[layout=horizontal]:md:pt-[calc(theme('spacing.header')_*_1.6)] group-data-[layout=horizontal]:px-3 group-data-[layout=horizontal]:group-data-[navbar=hidden]:pt-[calc(theme('spacing.header')_*_0.9)]">
+                    <div className="container-fluid group-data-[content=boxed]:max-w-boxed mx-auto">
+                        <div className="gap-2 ">
+                            <div className="col-span-12 card 2xl:col-span-12">
+
+                                {isOpen && (
+                                    <div
+                                        id="largeModal"
+                                        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                                    // onClick={() => {
+                                    //     onClose();
+                                    //     setExpense({});
+                                    // }}
+                                    >
+                                        <div className="fixed flex flex-col items-center justify-center left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white shadow-md rounded-md dark:bg-zink-600">
+                                            <div className="w-screen md:w-[40rem] bg-white shadow rounded-md dark:bg-zink-600 flex flex-col">
+                                                <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-zink-500">
+                                                    <h5 className="text-16">Expense Category</h5>
+                                                    <button
+                                                        onClick={() => {
+                                                            onClose();
+                                                        }}
+                                                        className="transition-all duration-200 ease-linear text-slate-500 hover:text-red-500 dark:text-zink-200 dark:hover:text-red-500"
+                                                    >
+                                                        <i data-lucide="x" className="size-5" />
+                                                    </button>
+                                                </div>
+                                                <div className="mx-auto md:max-w-lg">
+                                                <p class="mb-4 text-gray-500 dark:text-gray-300">Are you sure you want to Delete ?</p>
+                              
+                                                </div>
+
+                                                <div className="flex justify-end gap-2 mt-5 p-4 mt-auto border-t border-slate-200 dark:border-zink-500">
+                                                    <button
+                                                        type="button"
+                                                        className="text-red-500 bg-white btn hover:text-red-500 hover:bg-red-100 focus:text-red-500 focus:bg-red-100 active:text-red-500 active:bg-red-100 dark:bg-zink-700 dark:hover:bg-red-500/10 dark:focus:bg-red-500/10 dark:active:bg-red-500/10"
+                                                        onClick={() => {
+                                                            onClose();
+                                                        }}
+                                                    >
+                                                        <i data-lucide="x" className="inline-block size-4" />{" "}
+                                                        <span className="align-middle">Cancel</span>
+                                                    </button>
+                                                    <button
+                                                        type="submit"
+                                                        className="text-white btn bg-custom-500 border-custom-500 hover:text-white hover:bg-custom-600 hover:border-custom-600 focus:text-white focus:bg-custom-600 focus:border-custom-600 focus:ring focus:ring-custom-100 active:text-white active:bg-custom-600 active:border-custom-600 active:ring active:ring-custom-100 dark:ring-custom-400/20"
+                                                        onClick={deleteData}
+                                                    >
+                                                        Submit
+                                                    </button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
                             </div>
                         </div>
                     </div>
                 </div>
-            )}
+
+
+            </div>
         </>
     );
 }
