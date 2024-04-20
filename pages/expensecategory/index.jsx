@@ -15,7 +15,6 @@ const ExpenseCategory = () => {
         ToastMessage({ type, message });
     }, []);
     const [expenseCategoryList, setExpenseCategoryList] = useState([]);
-    console.log("expenseCategoryList", expenseCategoryList)
     const [loading, setLoading] = useState(true);
     const [limit, setLimit] = useState(10);
     const [editData, setEditData] = useState({});
