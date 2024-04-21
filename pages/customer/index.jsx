@@ -1,12 +1,14 @@
 import DeleteIcon from "@/components/elements/DeleteIcon";
 import EditIcon from "@/components/elements/EditIcon";
 import ViewIcon from "@/components/elements/ViewIcon";
-import { CUSTOMER_END_POINT } from "@/constants";
+
 import Axios from "@/utils/axios";
 import Link from "next/link";
 import React, { useEffect, useState, useCallback } from "react";
 import DataTable from "react-data-table-component";
 import CustomerForm from "./CustomerForm";
+import { CUSTOMER_END_POINT } from "@/constants/api_endpoints/customerEndPoints";
+import DeleterCustomer from "./DeleterCustomer";
 const Customer = () => {
 
 
@@ -136,21 +138,21 @@ const Customer = () => {
             sortable: true,
         }, {
             name: "Action",
-            selector: (row) => actionButton(row.id),
+            selector: (row) => actionButton(row),
         },
 
 
     ];
 
 
-    const actionButton = (laundry_id) => {
+    const actionButton = (row) => {
         return (
             <>
                 <ul className="action flex list-none p-0">
-                    <li className="m-2">
+                    <li className="m-2" onClick={() => handleDelete(row)}>
                         <DeleteIcon />
                     </li>
-                    <li className="m-2">
+                    <li className="m-2" onClick={() => handleEdit(row)}>
                         <EditIcon />
                     </li>
                     <li  className="m-2">
@@ -240,6 +242,8 @@ const Customer = () => {
 
         </div>
         <CustomerForm isOpen={isModalOpen} onClose={closeModal} setEditData={editData} isParentRender={reFetchHandler} />
+        <DeleterCustomer isOpen={isDeleteModalOpen} onClose={closeDeleteModal} data={editData} isParentRender={reFetchHandler} />
+
         </>
     )
 }

@@ -1,11 +1,12 @@
 import ToastMessage from "@/components/Toast";
-import { CUSTOMER_END_POINT} from "@/constants";
+import { CUSTOMER_END_POINT } from "@/constants/api_endpoints/customerEndPoints";
 import { post, put } from "@/helpers/api_helper";
 import { mapArrayToDropdown } from "@/helpers/common_Helper";
 import Axios from "@/utils/axios";
 import React, { useCallback, useEffect, useState } from "react";
 
 const CustomerForm = ({ isOpen, onClose, setEditData, isParentRender }) => {
+    console.log("setEditData",setEditData)
 
     const { http } = Axios();
     const notify = useCallback((type, message) => {
@@ -61,7 +62,7 @@ const CustomerForm = ({ isOpen, onClose, setEditData, isParentRender }) => {
         setLoading(true);
         try {
             if (setEditData?.id) {
-                const response = await http.put(CUSTOMER_END_POINT.update(setEditData.id), expense);
+                const response = await http.put(CUSTOMER_END_POINT.update(setEditData.id), customer);
                 if (response.data.status === true) {
                     notify('success', response.data.message);
                     if (isParentRender) {
@@ -73,7 +74,7 @@ const CustomerForm = ({ isOpen, onClose, setEditData, isParentRender }) => {
                     notify('error', response.data.message);
                 }
             } else {
-                const response = await http.post(CUSTOMER_END_POINT.create(), expense);
+                const response = await http.post(CUSTOMER_END_POINT.create(), customer);
                 if (response.data.status === true) {
                     notify('success', response.data.message);
                     if (isParentRender) {
@@ -185,6 +186,7 @@ const CustomerForm = ({ isOpen, onClose, setEditData, isParentRender }) => {
                                                                     className="form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
                                                                     placeholder="Customer address  1"
                                                                     onChange={handleChange}
+                                                                    value={customer?.address_1}
                                                                     
                                                                 />
                                                                 <p id="firstNameError" className="mt-1 text-sm text-red-500" />
@@ -205,6 +207,8 @@ const CustomerForm = ({ isOpen, onClose, setEditData, isParentRender }) => {
                                                                     className="form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
                                                                     placeholder="Customer address 2"
                                                                     onChange={handleChange}
+                                                                    value={customer?.address_2}
+
                                                                     
                                                                 />
                                                                 <p id="lastNameError" className="mt-1 text-sm text-red-500" />

@@ -2,6 +2,6 @@ import { SECURITY_END_POINT } from "./api_endpoints/securityEndPoints";
 import { SELLER_END_POINT } from "./api_endpoints/sellerEndPoints";
 import { EXPENSECATEGORY_END_POINT } from "./api_endpoints/expensecategoryEndPoints";
 import { EXPENSE_END_POINT } from "./api_endpoints/expenseEndPoints";
-import { Customer_END_POINT } from "./api_endpoints/customerEndPoints";
+import { CUSTOMER_END_POINT } from "./api_endpoints/customerEndPoints";
 
 export { SECURITY_END_POINT, SELLER_END_POINT, EXPENSECATEGORY_END_POINT, EXPENSE_END_POINT };
