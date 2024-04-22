@@ -1,16 +1,18 @@
 import React, { useCallback, useEffect, useState } from "react";
-import Axios from "@/utils/axios";
 import ToastMessage from "@/components/Toast";
-import { EXPENSECATEGORY_END_POINT } from "@/constants";
+import { CATEGORY_END_POINT } from '@/constants';
+import Axios from "@/utils/axios";
 
-const ExpenseCategoryForm = ({ isOpen, onClose, setEditData, isParentRender }) => {
+const CategoryForm = ({ isOpen, onClose, setEditData, isParentRender }) => {
+    
+
     const { http } = Axios();
     const notify = useCallback((type, message) => {
         ToastMessage({ type, message });
     }, []);
     const [loading, setLoading] = useState(false);
-    const [expenseCategory, setExpenseCategory] = useState({
-        name: "",
+    const [category, setCategory] = useState({
+        category_name: "",
         status: "",
     });
 
@@ -19,11 +21,11 @@ const ExpenseCategoryForm = ({ isOpen, onClose, setEditData, isParentRender }) =
 
     useEffect(() => {
         if (setEditData === null) {
-            setExpenseCategory({ name: "", status: null });
+            setCategory({ category_name: "", status: null });
         } else {
-            setExpenseCategory({
+            setCategory({
                 id: setEditData.id || "",
-                name: setEditData.name || "",
+                category_name: setEditData.category_name || "",
                 status: setEditData.status || "",
             });
         }
@@ -31,7 +33,7 @@ const ExpenseCategoryForm = ({ isOpen, onClose, setEditData, isParentRender }) =
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setExpenseCategory((prev) => ({
+        setCategory((prev) => ({
             ...prev,
             [name]: value,
         }));
@@ -45,25 +47,25 @@ const ExpenseCategoryForm = ({ isOpen, onClose, setEditData, isParentRender }) =
 
 
             if (setEditData?.id) {
-                const response = await http.put(EXPENSECATEGORY_END_POINT.update(setEditData.id), expenseCategory);
+                const response = await http.put(CATEGORY_END_POINT.update(setEditData.id), category);
                 if (response.data.status === true) {
                     notify('success', response.data.message);
                     if (isParentRender) {
                         isParentRender(true);
                     }
-                    setExpenseCategory({});
+                    setCategory({});
                     onClose();
                 } else {
                     notify('error', response.data.message);
                 }
             } else {
-                const response = await http.post(EXPENSECATEGORY_END_POINT.create(), expenseCategory);
+                const response = await http.post(CATEGORY_END_POINT.create(), category);
                 if (response.data.status === true) {
                     notify('success', response.data.message);
                     if (isParentRender) {
                         isParentRender(true);
                     }
-                    setExpenseCategory({});
+                    setCategory({});
                     onClose();
                 } else {
                     notify('error', response.data.message);
@@ -76,9 +78,8 @@ const ExpenseCategoryForm = ({ isOpen, onClose, setEditData, isParentRender }) =
             setLoading(false);
         }
     };
-
-    return (
-        <>
+  return (
+      <>
             <div
                 style={{ marginLeft: "16.25rem" }}
                 className="relative min-h-screen group-data-[sidebar-size=sm]:min-h-sm"
@@ -126,8 +127,8 @@ const ExpenseCategoryForm = ({ isOpen, onClose, setEditData, isParentRender }) =
                                                                     id="firstNameInput"
                                                                     className="form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
                                                                     placeholder="name"
-                                                                    name="name"
-                                                                    defaultValue={expenseCategory?.name}
+                                                                    name="category_name"
+                                                                    defaultValue={category?.category_name}
                                                                     onChange={handleChange}
                                                                 />
                                                                 <p id="firstNameError" className="mt-1 text-sm text-red-500" />
@@ -142,7 +143,7 @@ const ExpenseCategoryForm = ({ isOpen, onClose, setEditData, isParentRender }) =
                                                                 <select
                                                                     name="status"
                                                                     onChange={handleChange}
-                                                                    value={expenseCategory?.status}
+                                                                    value={category?.status}
                                                                     className="form-select border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200">
                                                                     <option selected="">Select category</option>
                                                                     <option value="1">Active</option>
@@ -189,7 +190,7 @@ const ExpenseCategoryForm = ({ isOpen, onClose, setEditData, isParentRender }) =
 
             </div>
         </>
-    );
-};
+  )
+}
 
-export default ExpenseCategoryForm;
+export default CategoryForm

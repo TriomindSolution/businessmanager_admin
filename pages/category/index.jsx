@@ -1,24 +1,26 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { EXPENSECATEGORY_END_POINT } from "@/constants";
 import Axios from "@/utils/axios";
 import DeleteIcon from "@/components/elements/DeleteIcon";
 import EditIcon from "@/components/elements/EditIcon";
 import ViewIcon from "@/components/elements/ViewIcon";
 import DataTable from "react-data-table-component";
-import ExpenseCategoryForm from "./ExpenseCategoryForm";
-import DeleteExpenseCategory from "./DeleteExpenseCategory";
+import { CATEGORY_END_POINT } from "@/constants";
+import CategoryForm from "./CategoryForm";
+import DeleteCategory from "./DeleteCategory";
 
-const ExpenseCategory = () => {
+const Category = () => {
+
     /*** Storing data start */
     const { http } = Axios();
     const notify = useCallback((type, message) => {
         ToastMessage({ type, message });
     }, []);
-    const [expenseCategoryList, setExpenseCategoryList] = useState([]);
+    const [categoryList, setCategoryList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [limit, setLimit] = useState(10);
     const [editData, setEditData] = useState({});
     const [isModalOpen, setIsModalOpen] = useState(false);
+    console.log(isModalOpen)
     const [isViewModalOpen, setViewIsModalOpen] = useState(false);
     const [isDeleteModalOpen, setDeleteIsModalOpen] = useState(false);
 
@@ -27,6 +29,7 @@ const ExpenseCategory = () => {
 
     /**Add function  start */
     const handleAdd = () => {
+        console.log("clicked");
         setIsModalOpen(true);
         setEditData(null);
     };
@@ -61,17 +64,18 @@ const ExpenseCategory = () => {
 
     /**Render Function Start */
     const reFetchHandler = (isRender) => {
-        if (isRender) fetchExpenseCategoryList();
+        if (isRender) fetchcategoryList();
     };
     /**Render Function end */
 
 
     /***Fetching table Data Start */
 
-    const fetchExpenseCategoryList = async () => {
+    const fetchcategoryList = async () => {
         try {
-            const response = await http.get(EXPENSECATEGORY_END_POINT.list());
-            setExpenseCategoryList(response.data?.data);
+            const response = await http.get(CATEGORY_END_POINT.list());
+            setCategoryList(response?.data?.data);
+            console.log(response?.data?.data)
             setLoading(false);
         } catch (error) {
             console.error('Error fetching seller list:', error);
@@ -80,7 +84,7 @@ const ExpenseCategory = () => {
     };
 
     useEffect(() => {
-        fetchExpenseCategoryList();
+        fetchcategoryList();
         return () => {
         };
     }, []);
@@ -96,8 +100,8 @@ const ExpenseCategory = () => {
             sortable: true,
         },
         {
-            name: "Name",
-            selector: (row) => row.name,
+            name: "Category Name",
+            selector: (row) => row.category_name,
             sortable: true,
         },
         {
@@ -133,10 +137,8 @@ const ExpenseCategory = () => {
         );
     };
 
-
-
-    return (
-        <>
+  return (
+    <>
         <div
             style={{ marginLeft: "16.25rem" }}
             className="relative min-h-screen group-data-[sidebar-size=sm]:min-h-sm"
@@ -149,7 +151,7 @@ const ExpenseCategory = () => {
                             <div className="card-body">
                                 <div className="grid items-center grid-cols-1 gap-3 mb-5 2xl:grid-cols-12">
                                     <div className="2xl:col-span-3">
-                                        <h6 className="text-15">Expense category</h6>
+                                        <h6 className="text-15">Category</h6>
                                     </div>
                                     {/*end col*/}
                                     <div className="2xl:col-span-3 2xl:col-start-10">
@@ -183,7 +185,7 @@ const ExpenseCategory = () => {
                                     <div className="w-full whitespace-nowrap dark:text-zink-200 dark:bg-zink-600">
                                         <DataTable
                                             columns={columns}
-                                            data={expenseCategoryList}
+                                            data={categoryList}
                                             pagination
                                             highlightOnHover
                                             subHeader
@@ -209,10 +211,11 @@ const ExpenseCategory = () => {
 
 
         </div>
-        <ExpenseCategoryForm isOpen={isModalOpen} onClose={closeModal} setEditData={editData} isParentRender={reFetchHandler} />
-        <DeleteExpenseCategory isOpen={isDeleteModalOpen} onClose={closeDeleteModal} data={editData} isParentRender={reFetchHandler} />
+        <CategoryForm isOpen={isModalOpen} onClose={closeModal} setEditData={editData} isParentRender={reFetchHandler} />
+        <DeleteCategory isOpen={isDeleteModalOpen} onClose={closeDeleteModal} data={editData} isParentRender={reFetchHandler} />
+
         </>
-    )
+  )
 }
 
-export default ExpenseCategory
+export default Category
