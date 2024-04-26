@@ -14,8 +14,7 @@ const ExpenseForm = ({ isOpen, onClose, setEditData, isParentRender }) => {
     const [loading, setLoading] = useState(false);
     const [expenseCategoryList, setExpenseCategoryList] = useState([]);
     const [expenseCtgryOption, setExpenseCtgryOption] = useState([]);
-    console.log("expenseCategoryList", expenseCategoryList);
-    console.log("expenseCtgryOption", expenseCtgryOption);
+ ;
     const [expense, setExpense] = useState({
         expensecategory_id: "",
         date: "",
