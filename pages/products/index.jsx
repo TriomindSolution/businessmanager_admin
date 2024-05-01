@@ -6,39 +6,22 @@ import ViewIcon from "@/components/elements/ViewIcon";
 import DataTable from "react-data-table-component";
 import { PRODUCT_END_POINT } from "@/constants";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const Products = () => {
     /*** Storing data start */
     const { http } = Axios();
+    const router = useRouter();
     const notify = useCallback((type, message) => {
         ToastMessage({ type, message });
     }, []);
     const [productList, setProductList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [limit, setLimit] = useState(10);
-    const [editData, setEditData] = useState({});
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [isViewModalOpen, setViewIsModalOpen] = useState(false);
     const [isDeleteModalOpen, setDeleteIsModalOpen] = useState(false);
 
     /*** Storing data end */
-
-
-    /**Add function  start */
-    const handleAdd = () => {
-        setIsModalOpen(true);
-        setEditData(null);
-    };
-    /**Add function end */
-
-
-    /** edit function start */
-    const handleEdit = (data) => {
-        setEditData(data);
-        setIsModalOpen(true);
-    };
-    /** edit function  end */
-
     const closeModal = () => {
         setIsModalOpen(false);
     };
@@ -69,8 +52,8 @@ const Products = () => {
     const fetchProductList = async () => {
         try {
             const response = await http.get(PRODUCT_END_POINT.list());
-            console.log(response.data?.data)
-            setProductList(response.data?.data);
+            console.log(response.data?.data?.data)
+            setProductList(response.data?.data?.data);
             setLoading(false);
         } catch (error) {
             console.error('Error fetching seller list:', error);
@@ -111,18 +94,28 @@ const Products = () => {
 
     ];
 
-
+    const handleEdit = (row) => {
+        console.log("values", row); 
+        const queryParams = new URLSearchParams({ row: JSON.stringify(row) }).toString();
+        router.push(`/products/ProductForm?${queryParams}`);
+    };
+    
+    
     const actionButton = (row) => {
         return (
             <>
                 <ul className="action flex list-none p-0">
 
-                    <li className="m-2" onClick={() => handleEdit(row)}>
+                    <li className="m-2" onClick={() => handleEdit(row)} >
                         <EditIcon />
                     </li>
-                    <li className="m-2">
-                        <ViewIcon />
+
+                    <li  className="m-2" >
+                        <a>
+                            <ViewIcon />
+                        </a>
                     </li>
+
                     <li className="m-2" onClick={() => handleDelete(row)}>
                         <DeleteIcon />
                     </li>
@@ -168,9 +161,9 @@ const Products = () => {
                                                 // onClick={handleAdd}
                                                 >
                                                     <i className="align-baseline ltr:pr-1 rtl:pl-1 ri-download-2-line" />
-                                                    <a href="/products/ProductForm">
+                                                    <Link href="/products/ProductForm">
                                                         Add
-                                                    </a>
+                                                    </Link>
                                                 </button>
 
                                             </div>

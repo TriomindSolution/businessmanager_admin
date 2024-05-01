@@ -4,14 +4,23 @@ import ToastMessage from "@/components/Toast";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { mapArrayToDropdown } from "@/helpers/common_Helper";
-import { CATEGORY_END_POINT, SELLER_END_POINT } from "@/constants";
+import { CATEGORY_END_POINT, PRODUCT_END_POINT, SELLER_END_POINT } from "@/constants";
+import { useRouter } from "next/router";
 
 
 const ProductForm = () => {
     const { http } = Axios();
+
     const notify = useCallback((type, message) => {
         ToastMessage({ type, message });
     }, []);
+
+    const router = useRouter();
+    const { row } = router.query;
+    const rowData = row ? JSON.parse(row) : null;
+
+    console.log("rowData", rowData);
+
     const [loading, setLoading] = useState(false);
     const [categoryList, setCategoryList] = useState([]);
     const [categoryOption, setCategoryOption] = useState([]);
@@ -22,6 +31,13 @@ const ProductForm = () => {
         per_unit_product_price: null,
         product_unit: null,
         stock_alert: null,
+        category_id:null,
+        seller_id:null,
+        product_quantity:null,
+        total_price:null,
+        product_details:'',
+        product_sku_code:'',
+        date:'',
         status: "",
     });
 
@@ -161,6 +177,14 @@ const ProductForm = () => {
         e.preventDefault();
 
         console.log(product, variants)
+
+        const response = await http.post(PRODUCT_END_POINT.create(), product, variants);
+                if (response.data.status === true) {
+                    notify('success', response.data.message);
+                    
+                } else {
+                    notify('error', response.data.message);
+                }
 
     }
     return (
@@ -345,7 +369,7 @@ const ProductForm = () => {
                                                         Seller <span className="text-red-500">*</span>
                                                     </label>
                                                     <select
-                                                        name="seller"
+                                                        name="seller_id"
                                                         id="countries"
                                                         className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                                                         onChange={handleChange}
@@ -404,6 +428,32 @@ const ProductForm = () => {
                                                         <option value="2">Inactive</option>
                                                     </select>
                                                 </div>
+
+
+                                            </div>
+
+                                            <div className="grid grid-cols-1 gap-x-5 xl:grid-cols-2">
+
+
+                                                <div className="mb-3">
+                                                    <label
+                                                        htmlFor="inputText"
+                                                        className="inline-block mb-2 text-base font-medium"
+                                                    >
+                                                        Total Price <span className="text-red-500">*</span>
+                                                    </label>
+                                                    <input
+                                                        type="number"
+                                                        id="inputText"
+                                                        className="form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
+                                                        required=""
+                                                        name="total_price"
+                                                        defaultValue={product?.total_price}
+                                                        onChange={handleChange}
+                                                    />
+                                                </div>
+
+
 
 
                                             </div>
