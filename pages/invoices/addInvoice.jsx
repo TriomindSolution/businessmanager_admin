@@ -1,6 +1,53 @@
-import React from 'react'
 
-const AddInvoice = () => {
+import ToastMessage from "@/components/Toast";
+import { ORDER_END_POINT } from "@/constants/api_endpoints/orderEndPoints";
+import { post, put } from "@/helpers/api_helper";
+import { mapArrayToDropdown } from "@/helpers/common_Helper";
+import Axios from "@/utils/axios";
+import React, { useCallback, useEffect, useState } from "react";
+
+
+
+const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
+
+    const { http } = Axios();
+    const notify = useCallback((type, message) => {
+        ToastMessage({ type, message });
+    }, []);
+
+    const [loading, setLoading] = useState(false);
+    const [order, setOrder] = useState({
+        invoice_no: "",
+        delivery_date: "",
+        notes:"",
+        payment:"",
+        payment_method:"",
+        payment_from:"",
+        shipping_charge:"",
+        total_amount:"",
+        name:"",
+        phone:"",
+        address_1:"",
+        product_id:"",
+        quantity:"",
+        price:"",
+        discount:"",
+        tax:"",
+        product_total:"",
+        size:"",
+        color:""
+
+
+
+
+        
+        
+
+
+
+    });
+
+
     return (
         <>
             <div
@@ -163,193 +210,10 @@ const AddInvoice = () => {
                                                 {/*end col*/}
                                             </div>
                                             {/*end grid*/}
-                                            <h6 className="my-5 underline text-16">Shipping Info:</h6>
-                                            <div className="grid grid-cols-1 gap-5 xl:grid-cols-12 changeAddress">
-                                                <div className="xl:col-span-3">
-                                                    <label
-                                                        htmlFor="fullNameShippingInput"
-                                                        className="inline-block mb-2 text-base font-medium"
-                                                    >
-                                                        Full Name
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        id="fullNameShippingInput"
-                                                        className="form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
-                                                        placeholder="Full Name"
-                                                        required=""
-                                                    />
-                                                </div>
-                                                {/*end col*/}
-                                                <div className="xl:col-span-3">
-                                                    <label
-                                                        htmlFor="phoneNoShippingInput"
-                                                        className="inline-block mb-2 text-base font-medium"
-                                                    >
-                                                        Phone No.
-                                                    </label>
-                                                    <input
-                                                        type="number"
-                                                        id="phoneNoShippingInput"
-                                                        className="form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
-                                                        placeholder="(00) 1234 567 8956"
-                                                        required=""
-                                                    />
-                                                </div>
-                                                {/*end col*/}
-                                                <div className="xl:col-span-3">
-                                                    <label
-                                                        htmlFor="alternativeNoShippingInput"
-                                                        className="inline-block mb-2 text-base font-medium"
-                                                    >
-                                                        Alternative No.
-                                                    </label>
-                                                    <input
-                                                        type="number"
-                                                        id="alternativeNoShippingInput"
-                                                        className="form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
-                                                        placeholder="(00) 1234 567 8956"
-                                                        required=""
-                                                    />
-                                                </div>
-                                                {/*end col*/}
-                                                <div className="xl:col-span-3">
-                                                    <label
-                                                        htmlFor="taxShippingInput"
-                                                        className="inline-block mb-2 text-base font-medium"
-                                                    >
-                                                        TAX No.
-                                                    </label>
-                                                    <input
-                                                        type="number"
-                                                        id="taxShippingInput"
-                                                        className="form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
-                                                        placeholder="12-34567974"
-                                                        required=""
-                                                    />
-                                                </div>
-                                                {/*end col*/}
-                                                <div className="xl:col-span-12">
-                                                    <label
-                                                        htmlFor="addressShippingInput"
-                                                        className="inline-block mb-2 text-base font-medium"
-                                                    >
-                                                        Address
-                                                    </label>
-                                                    <textarea
-                                                        className="form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
-                                                        placeholder="Address"
-                                                        id="addressShippingInput"
-                                                        rows={3}
-                                                        defaultValue={""}
-                                                    />
-                                                </div>
-                                                {/*end col*/}
-                                            </div>
+                                         
                                             {/*end grid*/}
-                                            <div className="flex items-center mt-5">
-                                                <div className="relative inline-block w-10 mr-2 align-middle transition duration-200 ease-in">
-                                                    <input
-                                                        type="checkbox"
-                                                        name="customSoftSwitch"
-                                                        id="customSoftSwitch"
-                                                        className="absolute block transition duration-300 ease-linear border-2 rounded-full appearance-none cursor-pointer size-5 border-slate-200 dark:border-zink-600 bg-white/80 dark:bg-zink-400 peer/published checked:bg-custom-500 dark:checked:bg-custom-500 ltr:checked:right-0 rtl:checked:left-0 checked:border-custom-100 dark:checked:border-custom-900 arrow-none checked:bg-none"
-                                                    />
-                                                    <label
-                                                        htmlFor="customSoftSwitch"
-                                                        className="block h-5 overflow-hidden duration-300 ease-linear border rounded-full cursor-pointer cursor-pointertransition border-slate-200 dark:border-zink-500 bg-slate-200 dark:bg-zink-600 peer-checked/published:bg-custom-100 dark:peer-checked/published:bg-custom-900 peer-checked/published:border-custom-100 dark:peer-checked/published:border-custom-900"
-                                                    />
-                                                </div>
-                                                <label
-                                                    htmlFor="customSoftSwitch"
-                                                    className="inline-block text-base font-medium"
-                                                >
-                                                    Will your Shipping &amp; Billing address same?
-                                                </label>
-                                            </div>
-                                            <h6 className="my-5 underline text-16">Billing Info:</h6>
-                                            <div className="grid grid-cols-1 gap-5 xl:grid-cols-12">
-                                                <div className="xl:col-span-3">
-                                                    <label
-                                                        htmlFor="fullNameBillingInput"
-                                                        className="inline-block mb-2 text-base font-medium"
-                                                    >
-                                                        Full Name
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        id="fullNameBillingInput"
-                                                        className="form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
-                                                        placeholder="Full Name"
-                                                        required=""
-                                                    />
-                                                </div>
-                                                {/*end col*/}
-                                                <div className="xl:col-span-3">
-                                                    <label
-                                                        htmlFor="phoneNoBillingInput"
-                                                        className="inline-block mb-2 text-base font-medium"
-                                                    >
-                                                        Phone No.
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        id="phoneNoBillingInput"
-                                                        className="form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
-                                                        placeholder="(00) 1234 567 8956"
-                                                        required=""
-                                                    />
-                                                </div>
-                                                {/*end col*/}
-                                                <div className="xl:col-span-3">
-                                                    <label
-                                                        htmlFor="alternativeNoBillingInput"
-                                                        className="inline-block mb-2 text-base font-medium"
-                                                    >
-                                                        Alternative No.
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        id="alternativeNoBillingInput"
-                                                        className="form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
-                                                        placeholder="(00) 1234 567 8956"
-                                                        required=""
-                                                    />
-                                                </div>
-                                                {/*end col*/}
-                                                <div className="xl:col-span-3">
-                                                    <label
-                                                        htmlFor="taxBillingInput"
-                                                        className="inline-block mb-2 text-base font-medium"
-                                                    >
-                                                        TAX No.
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        id="taxBillingInput"
-                                                        className="form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
-                                                        placeholder="12-34567974"
-                                                        required=""
-                                                    />
-                                                </div>
-                                                {/*end col*/}
-                                                <div className="xl:col-span-12">
-                                                    <label
-                                                        htmlFor="addressBillingInput"
-                                                        className="inline-block mb-2 text-base font-medium"
-                                                    >
-                                                        Address
-                                                    </label>
-                                                    <textarea
-                                                        className="form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
-                                                        placeholder="Address"
-                                                        id="addressBillingInput"
-                                                        rows={3}
-                                                        defaultValue={""}
-                                                    />
-                                                </div>
-                                                {/*end col*/}
-                                            </div>
+                                         
+                                          
                                             {/*end grid*/}
                                             <h6 className="my-5 underline text-16">Products Info:</h6>
                                             <div className="overflow-x-auto">
