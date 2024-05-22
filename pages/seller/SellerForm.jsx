@@ -100,7 +100,7 @@ const SellerForm = ({ isOpen, onClose, setEditData, isParentRender }) => {
                                 {isOpen && (
                                     <div
                                         id="largeModal"
-                                        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                                        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 modal-bg"
 
                                     >
                                         <div className="fixed flex flex-col items-center justify-center left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white shadow-md rounded-md dark:bg-zink-600">

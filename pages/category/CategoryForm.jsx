@@ -93,7 +93,7 @@ const CategoryForm = ({ isOpen, onClose, setEditData, isParentRender }) => {
                                 {isOpen && (
                                     <div
                                         id="largeModal"
-                                        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                                        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 modal-bg"
                                     // onClick={() => {
                                     //     onClose();
                                     //     setExpense({});

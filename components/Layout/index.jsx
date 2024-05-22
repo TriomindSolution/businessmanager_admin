@@ -40,22 +40,7 @@ const Layout = ({ children }) => {
           drawer-end=""
           className="fixed inset-y-0 flex flex-col w-full transition-transform duration-300 ease-in-out transform bg-white shadow ltr:right-0 rtl:left-0 md:w-96 z-drawer show dark:bg-zink-600"
         >
-          <div className="flex justify-between p-4 border-b border-slate-200 dark:border-zink-500">
-            <div className="grow">
-              <h5 className="mb-1 text-16">Tailwick Theme Customizer</h5>
-              <p className="font-normal text-slate-500 dark:text-zink-200">
-                Choose your themes &amp; layouts etc.
-              </p>
-            </div>
-            <div className="shrink-0">
-              <button
-                data-drawer-close="customizerButton"
-                className="transition-all duration-150 ease-linear text-slate-500 hover:text-slate-800 dark:text-zink-200 dark:hover:text-zink-50"
-              >
-                <i data-lucide="x" className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
+          
           <div className="h-full p-6 overflow-y-auto">
             <div>
               <h5 className="mb-3 underline capitalize text-15">

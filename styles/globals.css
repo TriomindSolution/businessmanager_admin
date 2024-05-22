@@ -1,33 +1,35 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+.mHisf {
+  background: #eee !important;
+  font-size: 1rem !important;
+  font-weight: 501 !important;
+  text-transform: uppercase !important;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+
+
+.action li{
+  background: #daddda4a;
+  color: #000 !important;
+  padding: 0.2rem 0.4rem;
+  border-radius: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #c8c8c8;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+
+.border-slate-200 {
+  --tw-border-opacity: 1 !important;
+  border-color: rgb(1 4 8 / 30%) !important;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+
+.modal-open {
+  background-color: rgba(0, 0, 0, 0.5); /* Change the background color as per your requirement */
+}
+
+.modal-bg{
+  background-color: #8f8a84;
+  opacity: 95%;
 }

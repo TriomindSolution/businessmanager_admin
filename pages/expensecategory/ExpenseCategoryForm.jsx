@@ -92,14 +92,14 @@ const ExpenseCategoryForm = ({ isOpen, onClose, setEditData, isParentRender }) =
                                 {isOpen && (
                                     <div
                                         id="largeModal"
-                                        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                                        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 modal-bg"
                                     // onClick={() => {
                                     //     onClose();
                                     //     setExpense({});
                                     // }}
                                     >
                                         <div className="fixed flex flex-col items-center justify-center left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white shadow-md rounded-md dark:bg-zink-600">
-                                            <div className="w-screen md:w-[40rem] bg-white shadow rounded-md dark:bg-zink-600 flex flex-col">
+                                        <div className="w-screen md:w-[40rem] bg-white shadow rounded-md dark:bg-zink-600 flex flex-col">
                                                 <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-zink-500">
                                                     <h5 className="text-16">Expense Category</h5>
                                                     <button

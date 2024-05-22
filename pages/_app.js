@@ -6,7 +6,8 @@ import Loader from "@/components/common/Loader";
 import Login from "./login";
 import { Slide, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-
+import "@/styles/globals.css";
+// import '../styles/globals.css'
 const MyApp = ({ Component, pageProps }) => {
   const [isMounted, setIsMounted] = useState(false);
   const { http, token, logout } = Axios();

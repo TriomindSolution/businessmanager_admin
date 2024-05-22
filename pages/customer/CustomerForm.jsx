@@ -100,7 +100,7 @@ const CustomerForm = ({ isOpen, onClose, setEditData, isParentRender }) => {
         <>
             <div
                 style={{ marginLeft: "16.25rem" }}
-                className="relative min-h-screen group-data-[sidebar-size=sm]:min-h-sm"
+                className="relative min-h-screen group-data-[sidebar-size=sm]:min-h-sm "
             >
 
                 <div className="group-data-[sidebar-size=lg]:ltr:md:ml-vertical-menu group-data-[sidebar-size=lg]:rtl:md:mr-vertical-menu group-data-[sidebar-size=md]:ltr:ml-vertical-menu-md group-data-[sidebar-size=md]:rtl:mr-vertical-menu-md group-data-[sidebar-size=sm]:ltr:ml-vertical-menu-sm group-data-[sidebar-size=sm]:rtl:mr-vertical-menu-sm pt-[calc(theme('spacing.header')_*_1)] pb-[calc(theme('spacing.header')_*_0.8)] px-4 group-data-[navbar=bordered]:pt-[calc(theme('spacing.header')_*_1.3)] group-data-[navbar=hidden]:pt-0 group-data-[layout=horizontal]:mx-auto group-data-[layout=horizontal]:max-w-screen-2xl group-data-[layout=horizontal]:px-0 group-data-[layout=horizontal]:group-data-[sidebar-size=lg]:ltr:md:ml-auto group-data-[layout=horizontal]:group-data-[sidebar-size=lg]:rtl:md:mr-auto group-data-[layout=horizontal]:md:pt-[calc(theme('spacing.header')_*_1.6)] group-data-[layout=horizontal]:px-3 group-data-[layout=horizontal]:group-data-[navbar=hidden]:pt-[calc(theme('spacing.header')_*_0.9)]">
@@ -111,7 +111,7 @@ const CustomerForm = ({ isOpen, onClose, setEditData, isParentRender }) => {
                                 {isOpen && (
                                     <div
                                         id="largeModal"
-                                        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                                        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 modal-bg"
                                
                                     >
                                         <div className="fixed flex flex-col items-center justify-center left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white shadow-md rounded-md dark:bg-zink-600">

@@ -40,6 +40,7 @@ const Expense = () => {
     
         /** edit function start */
         const handleEdit = (data) => {
+            console.log(data)
             setEditData(data);
             setIsModalOpen(true);
         };
@@ -127,25 +128,26 @@ const Expense = () => {
             sortable: true,
         }, {
             name: "Action",
-            selector: (row) => actionButton(row.id),
+            selector: (row) => actionButton(row),
         },
 
 
     ];
 
 
-    const actionButton = (laundry_id) => {
+    const actionButton = (row) => {
         return (
             <>
                 <ul className="action flex list-none p-0">
-                    <li className="m-2">
-                        <DeleteIcon />
-                    </li>
-                    <li className="m-2">
+                   
+                    <li className="m-2"  onClick={() => handleEdit(row)}>
                         <EditIcon />
                     </li>
                     <li  className="m-2">
                         <ViewIcon />
+                    </li>
+                    <li className="m-2" onClick={() => handleDelete(row)}>
+                        <DeleteIcon />
                     </li>
                 </ul>
             </>
@@ -208,15 +210,14 @@ const Expense = () => {
                                             pagination
                                             highlightOnHover
                                             subHeader
-                                            // subHeaderComponent={
-                                            //     <input
-                                            //         type="text"
-                                            //         placeholder="search..."
-                                            //         className="w-25 form-control "
-                                            //     value={search}
-                                            //     onChange={(e) => setSearch(e.target.value)}
-                                            //     />
-                                            // }
+                                            subHeaderComponent={
+                                                <input
+                                                    type="text"
+                                                    placeholder="search..."
+                                                    className="w-80 border-2 border-black-600 rounded-md px-3 py-1"
+                                                
+                                                />
+                                            }
                                             striped
                                         />
                                     </div>

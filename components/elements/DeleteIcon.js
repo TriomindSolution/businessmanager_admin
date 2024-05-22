@@ -3,7 +3,7 @@ import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 export default function DeleteIcon(){
     return (
         <>
-         <FontAwesomeIcon icon={faTrashAlt} />
+         <FontAwesomeIcon icon={faTrashAlt} className="text-red-500" />
         </>
       
     )

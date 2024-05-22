@@ -734,14 +734,14 @@ File: Main Js File
       }
       // Update Active
       function updateActiveBtn(btnId) {
-        const elemName = document.getElementById(btnId).getAttribute("name");
+        const elemName = document.getElementById(btnId)?.getAttribute("name");
         const allElem = document
           .querySelector("#customizerButton")
           ?.querySelectorAll('button[name="' + elemName + '"]');
-        allElem.forEach(function (elem) {
-          elem.classList.remove("active");
+        allElem?.forEach(function (elem) {
+          elem?.classList.remove("active");
         });
-        document.getElementById(btnId).classList.add("active");
+        document.getElementById(btnId)?.classList.add("active");
       }
 
       //set full layout
