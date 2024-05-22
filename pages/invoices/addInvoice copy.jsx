@@ -238,9 +238,6 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
                                                             <th className="px-3.5 py-2.5 font-medium text-sm text-slate-500 uppercase border border-slate-200 dark:text-zink-200 dark:border-zink-500 w-44">
                                                                 Total
                                                             </th>
-                                                            <th className="px-3.5 py-2.5 font-medium text-sm text-slate-500 uppercase border border-slate-200 dark:text-zink-200 dark:border-zink-500 w-44">
-                                                                Total
-                                                            </th>
                                                         </tr>
                                                     </thead>
                                                     <tbody className="before:block before:h-3 item-list">
@@ -326,10 +323,18 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
                                                                     readOnly=""
                                                                 />
                                                             </td>
-
-                                                            <td
-                                                                className="border border-slate-200 dark:border-zink-500 row-span-2 px-6 py-1.5  justify-center items-center"
-                                                            >
+                                                        </tr>
+                                                        <tr>
+                                                            <td className="border border-slate-200 dark:border-zink-500">
+                                                                <input
+                                                                    type="text"
+                                                                    id="itemdescription1"
+                                                                    className="px-3.5 py-2.5 border-none form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
+                                                                    placeholder="Enter Description (Optional)"
+                                                                    required=""
+                                                                />
+                                                            </td>
+                                                            <td className="border border-slate-200 px-3.5 py-1.5 text-center dark:border-zink-500">
                                                                 <button
                                                                     type="button"
                                                                     className="px-2 py-1.5 text-xs text-red-500 bg-red-100 btn hover:text-white hover:bg-red-600 focus:text-white focus:bg-red-600 focus:ring focus:ring-red-100 active:text-white active:bg-red-600 active:ring active:ring-red-100 dark:bg-red-500/20 dark:text-red-500 dark:hover:bg-red-500 dark:hover:text-white dark:focus:bg-red-500 dark:focus:text-white dark:active:bg-red-500 dark:active:text-white dark:ring-red-400/20 product-removal"
@@ -341,11 +346,12 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
                                                                     <span className="align-middle">Delete</span>
                                                                 </button>
                                                             </td>
-
+                                                            <td
+                                                                colSpan={3}
+                                                                className="border border-slate-200 dark:border-zink-500"
+                                                            />
                                                         </tr>
-
                                                     </tbody>
-
                                                     <tbody className="before:block before:h-3 item-list">
                                                         <tr className="item">
                                                             <td className="border border-slate-200 dark:border-zink-500">
@@ -429,10 +435,18 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
                                                                     readOnly=""
                                                                 />
                                                             </td>
-
-                                                            <td
-                                                                className="border border-slate-200 dark:border-zink-500 row-span-2 px-6 py-1.5  justify-center items-center"
-                                                            >
+                                                        </tr>
+                                                        <tr>
+                                                            <td className="border border-slate-200 dark:border-zink-500">
+                                                                <input
+                                                                    type="text"
+                                                                    id="itemdescription1"
+                                                                    className="px-3.5 py-2.5 border-none form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
+                                                                    placeholder="Enter Description (Optional)"
+                                                                    required=""
+                                                                />
+                                                            </td>
+                                                            <td className="border border-slate-200 px-3.5 py-1.5 text-center dark:border-zink-500">
                                                                 <button
                                                                     type="button"
                                                                     className="px-2 py-1.5 text-xs text-red-500 bg-red-100 btn hover:text-white hover:bg-red-600 focus:text-white focus:bg-red-600 focus:ring focus:ring-red-100 active:text-white active:bg-red-600 active:ring active:ring-red-100 dark:bg-red-500/20 dark:text-red-500 dark:hover:bg-red-500 dark:hover:text-white dark:focus:bg-red-500 dark:focus:text-white dark:active:bg-red-500 dark:active:text-white dark:ring-red-400/20 product-removal"
@@ -444,9 +458,11 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
                                                                     <span className="align-middle">Delete</span>
                                                                 </button>
                                                             </td>
-
+                                                            <td
+                                                                colSpan={3}
+                                                                className="border border-slate-200 dark:border-zink-500"
+                                                            />
                                                         </tr>
-
                                                     </tbody>
                                                     <tbody className="before:block before:h-4" id="invoiceTable">
                                                         <tr>
