@@ -5,7 +5,7 @@ import { post, put } from "@/helpers/api_helper";
 import { mapArrayToDropdown } from "@/helpers/common_Helper";
 import Axios from "@/utils/axios";
 import React, { useCallback, useEffect, useState } from "react";
-
+import {PRODUCT_END_POINT} from "@/constants";
 
 
 const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
@@ -14,7 +14,8 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
     const notify = useCallback((type, message) => {
         ToastMessage({ type, message });
     }, []);
-
+    const [itemList, setItemList] = useState([]);
+    const [itemOption, setItemOption] = useState([]);
     const [loading, setLoading] = useState(false);
     const [order, setOrder] = useState({
         invoice_no: "",
@@ -46,6 +47,56 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
 
 
     });
+
+
+ /***Fetching Item Data Start */
+
+ const fetchItemList = async () => {
+    try {
+        const response = await http.get(PRODUCT_END_POINT.list());
+        setItemList(response.data?.data);
+        setLoading(false);
+      
+    } catch (error) {
+        console.error('Error fetching item list:', error);
+        setLoading(false);
+    }
+};
+
+useEffect(() => {
+    fetchItemList();
+    return () => {
+    };
+}, []);
+
+/***Fetching ExpenseCategory Data end */
+
+
+
+
+
+
+//  /**Items dropdown */
+//  useEffect(() => {
+//     const ITEMDROPDOWN = mapArrayToDropdown(
+//         itemList,
+//         'name',
+//         'id'
+//     );
+
+//     const allItem = ITEMDROPDOWN?.map((item) => ({
+//         id: item?.id,
+//         value: item?.name,
+//     }));
+//     setItemOption(allItem);
+// }, [itemList]);
+
+
+// /**fetch Items dropdown list  End */
+
+
+
+
 
 
     return (
@@ -246,13 +297,24 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
                                                     <tbody className="before:block before:h-3 item-list">
                                                         <tr className="item">
                                                             <td className="border border-slate-200 dark:border-zink-500">
-                                                                <input
-                                                                    type="text"
-                                                                    id="itemName1"
-                                                                    className="px-3.5 py-2.5 border-none form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
-                                                                    placeholder="Item Name"
-                                                                    required=""
-                                                                />
+                                                            <select
+                        name="name"
+                        id="itemName"
+                        className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                        value=""
+                       
+                        required
+                    >
+                        <option value="" disabled>
+                            Choose an Item
+                        </option>
+                        {Array.isArray(itemList) && itemList.map((item) => (
+                            <option key={item.id} value={item.name}>
+                                {item.name}
+                            </option>
+                        ))}
+                    </select>
+                                                    
                                                             </td>
                                                             <td className="w-40 border border-slate-200 dark:border-zink-500">
                                                                 <div className="flex justify-center text-center input-step">

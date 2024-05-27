@@ -140,10 +140,12 @@ const ProductForm = () => {
             ...prev,
             [name]: value,
         }));
+
+
     };
 
 
-
+console.log(product);
 
 
 
