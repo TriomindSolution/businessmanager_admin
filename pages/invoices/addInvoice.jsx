@@ -15,6 +15,7 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
         ToastMessage({ type, message });
     }, []);
     const [itemList, setItemList] = useState([]);
+    const [items,setItems]=useState([]);
     const [itemOption, setItemOption] = useState([]);
     const [loading, setLoading] = useState(false);
     const [order, setOrder] = useState({
@@ -54,6 +55,8 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
  const fetchItemList = async () => {
     try {
         const response = await http.get(PRODUCT_END_POINT.list());
+
+       
         setItemList(response.data?.data);
         setLoading(false);
       
@@ -68,7 +71,7 @@ useEffect(() => {
     return () => {
     };
 }, []);
-
+console.log(itemList.data);
 /***Fetching ExpenseCategory Data end */
 
 
@@ -94,7 +97,12 @@ useEffect(() => {
 
 // /**fetch Items dropdown list  End */
 
-
+const ItemList = ({ itemList }) => {
+    const [items, setItems] = useState([{ id: '', quantity: 0, price: '', discount: '', text: '' }]);
+};
+    const handleAddItem = () => {
+      setItems([...items, { id: '', quantity: 0, price: '', discount: '', text: '' }]);
+    };
 
 
 
@@ -140,21 +148,21 @@ useEffect(() => {
                                                         htmlFor="invoiceNo"
                                                         className="inline-block mb-2 text-base font-medium"
                                                     >
-                                                        Invoice Date
+                                                        Delivery Date
                                                     </label>
                                                     <input
-                                                        type="text"
+                                                        type="date"
                                                         id="invoiceNo"
                                                         className="form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
                                                         placeholder="Invoice Date"
                                                         data-provider="flatpickr"
                                                         data-date-format="d M, Y"
-                                                        readOnly="readonly"
+                                                       
                                                         required=""
                                                     />
                                                 </div>
                                                 {/*end col*/}
-                                                <div className="xl:col-span-3">
+                                                {/* <div className="xl:col-span-3">
                                                     <label
                                                         htmlFor="invoiceDue"
                                                         className="inline-block mb-2 text-base font-medium"
@@ -162,18 +170,18 @@ useEffect(() => {
                                                         Invoice Due
                                                     </label>
                                                     <input
-                                                        type="text"
+                                                        type="date"
                                                         id="invoiceDue"
                                                         className="form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
                                                         placeholder="Invoice Due"
                                                         data-provider="flatpickr"
                                                         data-date-format="d M, Y"
-                                                        readOnly="readonly"
+                                                        
                                                         required=""
                                                     />
-                                                </div>
+                                                </div> */}
                                                 {/*end col*/}
-                                                <div className="xl:col-span-3">
+                                                {/* <div className="xl:col-span-3">
                                                     <label
                                                         htmlFor="legalRegistrationNo"
                                                         className="inline-block mb-2 text-base font-medium"
@@ -187,53 +195,56 @@ useEffect(() => {
                                                         placeholder="Legal Registration No"
                                                         required=""
                                                     />
-                                                </div>
+                                                </div> */}
                                                 {/*end col*/}
                                                 <div className="xl:col-span-3">
                                                     <label
-                                                        htmlFor="emailInvoiceInput"
+                                                        htmlFor="name"
                                                         className="inline-block mb-2 text-base font-medium"
                                                     >
-                                                        Email
+                                                        Name
                                                     </label>
                                                     <input
-                                                        type="email"
+                                                        type="text"
                                                         id="emailInvoiceInput"
                                                         className="form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
                                                         placeholder="tailwick@themesdesign.com"
                                                         required=""
+                                                        name="name"
                                                     />
                                                 </div>
                                                 {/*end col*/}
                                                 <div className="xl:col-span-3">
                                                     <label
-                                                        htmlFor="websiteInput"
+                                                        htmlFor="phone"
                                                         className="inline-block mb-2 text-base font-medium"
                                                     >
-                                                        Website
+                                                       phone
                                                     </label>
                                                     <input
                                                         type="text"
                                                         id="websiteInput"
                                                         className="form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
-                                                        placeholder="www.themesdesign.in"
+                                                        placeholder="phone"
                                                         required=""
+                                                        name="phone"
                                                     />
                                                 </div>
                                                 {/*end col*/}
                                                 <div className="xl:col-span-3">
                                                     <label
-                                                        htmlFor="contactInput"
+                                                        htmlFor="address"
                                                         className="inline-block mb-2 text-base font-medium"
                                                     >
-                                                        Contact US
+                                                        Address
                                                     </label>
                                                     <input
-                                                        type="number"
+                                                        type="text"
                                                         id="contactInput"
                                                         className="form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
-                                                        placeholder="(241) 1234 567 8900"
+                                                        placeholder="address"
                                                         required=""
+                                                        name="address"
                                                     />
                                                 </div>
                                                 {/*end col*/}
@@ -294,317 +305,130 @@ useEffect(() => {
                                                             </th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody className="before:block before:h-3 item-list">
-                                                        <tr className="item">
-                                                            <td className="border border-slate-200 dark:border-zink-500">
-                                                            <select
-                        name="name"
-                        id="itemName"
-                        className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                        value=""
-                       
-                        required
-                    >
-                        <option value="" disabled>
-                            Choose an Item
-                        </option>
-                        {Array.isArray(itemList) && itemList.map((item) => (
-                            <option key={item.id} value={item.name}>
-                                {item.name}
-                            </option>
-                        ))}
-                    </select>
-                                                    
-                                                            </td>
-                                                            <td className="w-40 border border-slate-200 dark:border-zink-500">
-                                                                <div className="flex justify-center text-center input-step">
-                                                                    <button
-                                                                        type="button"
-                                                                        className="border size-9 leading-[15px] btn-minus bg-white dark:bg-zink-700 dark:border-zink-500 ltr:rounded-l rtl:rounded-r transition-all duration-200 ease-linear border-slate-200 text-slate-500 dark:text-zink-200 hover:bg-custom-500 dark:hover:bg-custom-500 hover:text-custom-50 dark:hover:text-custom-50 hover:border-custom-500 dark:hover:border-custom-500 focus:bg-custom-500 dark:focus:bg-custom-500 focus:border-custom-500 dark:focus:border-custom-500 focus:text-custom-50 dark:focus:text-custom-50"
-                                                                    >
-                                                                        <i data-lucide="minus" className="inline-block size-4" />
-                                                                    </button>
-                                                                    <input
-                                                                        type="number"
-                                                                        className="w-12 text-center ltr:pl-2 rtl:pr-2 h-9 border-y product-quantity dark:bg-zink-700 focus:shadow-none dark:border-zink-500 item-quantity"
-                                                                        defaultValue={0}
-                                                                        min={0}
-                                                                        max={100}
-                                                                        readOnly=""
-                                                                    />
-                                                                    <button
-                                                                        type="button"
-                                                                        className="transition-all duration-200 ease-linear bg-white border dark:bg-zink-700 dark:border-zink-500 ltr:rounded-r rtl:rounded-l size-9 border-slate-200 btn-plus text-slate-500 dark:text-zink-200 hover:bg-custom-500 dark:hover:bg-custom-500 hover:text-custom-50 dark:hover:text-custom-50 hover:border-custom-500 dark:hover:border-custom-500 focus:bg-custom-500 dark:focus:bg-custom-500 focus:border-custom-500 dark:focus:border-custom-500 focus:text-custom-50 dark:focus:text-custom-50"
-                                                                    >
-                                                                        <i data-lucide="plus" className="inline-block size-4" />
-                                                                    </button>
-                                                                </div>
-                                                            </td>
-                                                            <td className="w-40 border border-slate-200 dark:border-zink-500">
-                                                                <input
-                                                                    type="number"
-                                                                    id="itemName1"
-                                                                    className="px-3.5 py-2.5 border-none form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200 item-price"
-                                                                    placeholder="$00.00"
-                                                                    required=""
-                                                                />
-                                                            </td>
-                                                            <td className="w-40 border border-slate-200 dark:border-zink-500">
-                                                                <input
-                                                                    type="text"
-                                                                    id="itemName1"
-                                                                    className="px-3.5 py-2.5 border-none form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200 item-discount"
-                                                                    placeholder="0%"
-                                                                    required=""
-                                                                />
-                                                            </td>
-                                                            <td className="w-40 border border-slate-200 dark:border-zink-500">
-                                                                <input
-                                                                    type="text"
-                                                                    id="itemName1"
-                                                                    className="px-3.5 py-2.5 border-none form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200 item-text"
-                                                                    placeholder="0%"
-                                                                    required=""
-                                                                />
-                                                            </td>
-                                                            <td
-                                                                className="border border-slate-200 dark:border-zink-500"
-                                                                rowSpan={2}
-                                                            >
-                                                                <div className="mb-1">
-                                                                    <input
-                                                                        type="text"
-                                                                        id="ItemTotal"
-                                                                        className="px-3.5 py-2.5 border-none form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200 item-line-price"
-                                                                        placeholder="$00.00"
-                                                                        readOnly=""
-                                                                    />
-                                                                </div>
-                                                                <input
-                                                                    type="text"
-                                                                    id="itemDiscountsInput"
-                                                                    className="px-3.5 pb-2.5 pt-0 border-none form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200 cart-discount"
-                                                                    placeholder="-$00.00"
-                                                                    readOnly=""
-                                                                />
-                                                            </td>
 
-                                                            <td
-                                                                className="border border-slate-200 dark:border-zink-500 row-span-2 px-6 py-1.5  justify-center items-center"
-                                                            >
-                                                                <button
-                                                                    type="button"
-                                                                    className="px-2 py-1.5 text-xs text-red-500 bg-red-100 btn hover:text-white hover:bg-red-600 focus:text-white focus:bg-red-600 focus:ring focus:ring-red-100 active:text-white active:bg-red-600 active:ring active:ring-red-100 dark:bg-red-500/20 dark:text-red-500 dark:hover:bg-red-500 dark:hover:text-white dark:focus:bg-red-500 dark:focus:text-white dark:active:bg-red-500 dark:active:text-white dark:ring-red-400/20 product-removal"
-                                                                >
-                                                                    <i
-                                                                        data-lucide="trash-2"
-                                                                        className="inline-block mr-1 align-middle size-3"
-                                                                    />{" "}
-                                                                    <span className="align-middle">Delete</span>
-                                                                </button>
-                                                            </td>
+                                                   <tbody className="before:block before:h-3" id="itemBody">
+          {items.map((item, index) => (
+            <tr className="item" key={index}>
+              <td className="border border-slate-200 dark:border-zink-500">
+                <select
+                  name="name"
+                  id={`itemName-${index}`}
+                  className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                  value={item.id}
+                  onChange={(e) => handleChange(index, 'id', e.target.value)}
+                  required
+                >
+                  <option value="" disabled>
+                    Choose an Item
+                  </option>
+                  {Array.isArray(itemList) && itemList.map((item) => (
+                    <option key={item.data.id} value={item.data.id}>
+                      {item.data.name}
+                    </option>
+                  ))}
+                </select>
+              </td>
+              <td className="w-40 border border-slate-200 dark:border-zink-500">
+                <div className="flex justify-center text-center input-step">
+                  <button
+                    type="button"
+                    className="btn-minus"
+                    onClick={() => handleDecrementQuantity(index)}
+                  >
+                    -
+                  </button>
+                  <input
+                    type="number"
+                    className="item-quantity"
+                    value={item.quantity}
+                    min={0}
+                    max={100}
+                    readOnly
+                  />
+                  <button
+                    type="button"
+                    className="btn-plus"
+                    onClick={() => handleIncrementQuantity(index)}
+                  >
+                    +
+                  </button>
+                </div>
+              </td>
+              <td className="w-40 border border-slate-200 dark:border-zink-500">
+                <input
+                  type="number"
+                  className="item-price"
+                  placeholder="$00.00"
+                  value={item.price}
+                  onChange={(e) => handleChange(index, 'price', e.target.value)}
+                  required
+                />
+              </td>
+              <td className="w-40 border border-slate-200 dark:border-zink-500">
+                <input
+                  type="text"
+                  className="item-discount"
+                  placeholder="0%"
+                  value={item.discount}
+                  onChange={(e) => handleChange(index, 'discount', e.target.value)}
+                  required
+                />
+              </td>
+              <td className="w-40 border border-slate-200 dark:border-zink-500">
+                <input
+                  type="text"
+                  className="item-text"
+                  placeholder="Item details"
+                  value={item.text}
+                  onChange={(e) => handleChange(index, 'text', e.target.value)}
+                  required
+                />
+              </td>
+              <td className="border border-slate-200 dark:border-zink-500" rowSpan={2}>
+                <div className="mb-1">
+                  <input
+                    type="text"
+                    className="item-line-price"
+                    placeholder="$00.00"
+                    value={(item.quantity * item.price).toFixed(2)}
+                    readOnly
+                  />
+                </div>
+                <input
+                  type="text"
+                  className="cart-discount"
+                  placeholder="-$00.00"
+                  value={((item.quantity * item.price * item.discount) / 100).toFixed(2)}
+                  readOnly
+                />
+              </td>
+              <td className="border border-slate-200 dark:border-zink-500 row-span-2 px-6 py-1.5">
+                <button
+                  type="button"
+                  className="product-removal"
+                  onClick={() => handleRemoveItem(index)}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colSpan={6}>
+              <button
+                type="button"
+                id="addItemButton"
+                className="bg-white border-dashed text-custom-500 btn border-custom-500"
+                onClick={handleAddItem}
+              >
+                Add Item
+              </button>
+            </td>
+          </tr>
+        </tfoot>
 
-                                                        </tr>
-
-                                                    </tbody>
-
-                                                    <tbody className="before:block before:h-3 item-list">
-                                                        <tr className="item">
-                                                            <td className="border border-slate-200 dark:border-zink-500">
-                                                                <input
-                                                                    type="text"
-                                                                    id="itemName1"
-                                                                    className="px-3.5 py-2.5 border-none form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
-                                                                    placeholder="Item Name"
-                                                                    required=""
-                                                                />
-                                                            </td>
-                                                            <td className="w-40 border border-slate-200 dark:border-zink-500">
-                                                                <div className="flex justify-center text-center input-step">
-                                                                    <button
-                                                                        type="button"
-                                                                        className="border size-9 leading-[15px] btn-minus bg-white dark:bg-zink-700 dark:border-zink-500 ltr:rounded-l rtl:rounded-r transition-all duration-200 ease-linear border-slate-200 text-slate-500 dark:text-zink-200 hover:bg-custom-500 dark:hover:bg-custom-500 hover:text-custom-50 dark:hover:text-custom-50 hover:border-custom-500 dark:hover:border-custom-500 focus:bg-custom-500 dark:focus:bg-custom-500 focus:border-custom-500 dark:focus:border-custom-500 focus:text-custom-50 dark:focus:text-custom-50"
-                                                                    >
-                                                                        <i data-lucide="minus" className="inline-block size-4" />
-                                                                    </button>
-                                                                    <input
-                                                                        type="number"
-                                                                        className="w-12 text-center ltr:pl-2 rtl:pr-2 h-9 border-y product-quantity dark:bg-zink-700 focus:shadow-none dark:border-zink-500 item-quantity"
-                                                                        defaultValue={0}
-                                                                        min={0}
-                                                                        max={100}
-                                                                        readOnly=""
-                                                                    />
-                                                                    <button
-                                                                        type="button"
-                                                                        className="transition-all duration-200 ease-linear bg-white border dark:bg-zink-700 dark:border-zink-500 ltr:rounded-r rtl:rounded-l size-9 border-slate-200 btn-plus text-slate-500 dark:text-zink-200 hover:bg-custom-500 dark:hover:bg-custom-500 hover:text-custom-50 dark:hover:text-custom-50 hover:border-custom-500 dark:hover:border-custom-500 focus:bg-custom-500 dark:focus:bg-custom-500 focus:border-custom-500 dark:focus:border-custom-500 focus:text-custom-50 dark:focus:text-custom-50"
-                                                                    >
-                                                                        <i data-lucide="plus" className="inline-block size-4" />
-                                                                    </button>
-                                                                </div>
-                                                            </td>
-                                                            <td className="w-40 border border-slate-200 dark:border-zink-500">
-                                                                <input
-                                                                    type="number"
-                                                                    id="itemName1"
-                                                                    className="px-3.5 py-2.5 border-none form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200 item-price"
-                                                                    placeholder="$00.00"
-                                                                    required=""
-                                                                />
-                                                            </td>
-                                                            <td className="w-40 border border-slate-200 dark:border-zink-500">
-                                                                <input
-                                                                    type="text"
-                                                                    id="itemName1"
-                                                                    className="px-3.5 py-2.5 border-none form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200 item-discount"
-                                                                    placeholder="0%"
-                                                                    required=""
-                                                                />
-                                                            </td>
-                                                            <td className="w-40 border border-slate-200 dark:border-zink-500">
-                                                                <input
-                                                                    type="text"
-                                                                    id="itemName1"
-                                                                    className="px-3.5 py-2.5 border-none form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200 item-text"
-                                                                    placeholder="0%"
-                                                                    required=""
-                                                                />
-                                                            </td>
-                                                            <td
-                                                                className="border border-slate-200 dark:border-zink-500"
-                                                                rowSpan={2}
-                                                            >
-                                                                <div className="mb-1">
-                                                                    <input
-                                                                        type="text"
-                                                                        id="ItemTotal"
-                                                                        className="px-3.5 py-2.5 border-none form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200 item-line-price"
-                                                                        placeholder="$00.00"
-                                                                        readOnly=""
-                                                                    />
-                                                                </div>
-                                                                <input
-                                                                    type="text"
-                                                                    id="itemDiscountsInput"
-                                                                    className="px-3.5 pb-2.5 pt-0 border-none form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200 cart-discount"
-                                                                    placeholder="-$00.00"
-                                                                    readOnly=""
-                                                                />
-                                                            </td>
-
-                                                            <td
-                                                                className="border border-slate-200 dark:border-zink-500 row-span-2 px-6 py-1.5  justify-center items-center"
-                                                            >
-                                                                <button
-                                                                    type="button"
-                                                                    className="px-2 py-1.5 text-xs text-red-500 bg-red-100 btn hover:text-white hover:bg-red-600 focus:text-white focus:bg-red-600 focus:ring focus:ring-red-100 active:text-white active:bg-red-600 active:ring active:ring-red-100 dark:bg-red-500/20 dark:text-red-500 dark:hover:bg-red-500 dark:hover:text-white dark:focus:bg-red-500 dark:focus:text-white dark:active:bg-red-500 dark:active:text-white dark:ring-red-400/20 product-removal"
-                                                                >
-                                                                    <i
-                                                                        data-lucide="trash-2"
-                                                                        className="inline-block mr-1 align-middle size-3"
-                                                                    />{" "}
-                                                                    <span className="align-middle">Delete</span>
-                                                                </button>
-                                                            </td>
-
-                                                        </tr>
-
-                                                    </tbody>
-                                                    <tbody className="before:block before:h-4" id="invoiceTable">
-                                                        <tr>
-                                                            <td colSpan={6}>
-                                                                <a href="javascript:void(0)" id="addBtn">
-                                                                    <button
-                                                                        type="button"
-                                                                        className="bg-white border-dashed text-custom-500 btn border-custom-500 hover:text-custom-500 hover:bg-custom-50 hover:border-custom-600 focus:text-custom-600 focus:bg-custom-50 focus:border-custom-600 active:text-custom-600 active:bg-custom-50 active:border-custom-600 dark:bg-zink-700 dark:ring-custom-400/20 dark:hover:bg-custom-800/20 dark:focus:bg-custom-800/20 dark:active:bg-custom-800/20"
-                                                                    >
-                                                                        <i
-                                                                            data-lucide="plus"
-                                                                            className="inline-block mr-1 align-middle size-3"
-                                                                        />{" "}
-                                                                        <span className="align-middle">Add Item</span>
-                                                                    </button>
-                                                                </a>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                    <tbody className="before:block before:h-3" id="totalAmount">
-                                                        <tr>
-                                                            <td colSpan={4} />
-                                                            <td className="border-b border-slate-200 px-3.5 py-2.5 text-slate-500 dark:text-zink-200 dark:border-zink-500">
-                                                                Sub Total
-                                                            </td>
-                                                            <td className="font-medium border-b border-slate-200 dark:border-zink-500">
-                                                                <input
-                                                                    type="text"
-                                                                    id="subTotale"
-                                                                    className="px-3.5 py-2.5 border-none form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200 cart-subtotal"
-                                                                    placeholder="$00.00"
-                                                                    readOnly=""
-                                                                />
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colSpan={4} />
-                                                            <td className="border-b border-slate-200 px-3.5 py-2.5 text-slate-500 dark:text-zink-200 dark:border-zink-500">
-                                                                Estimated Tax (18%)
-                                                            </td>
-                                                            <td className="font-medium border-b border-slate-200 dark:border-zink-500">
-                                                                <input
-                                                                    type="text"
-                                                                    id="estimatedTax"
-                                                                    className="px-3.5 py-2.5 border-none form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200 cart-tax"
-                                                                    placeholder="$00.00"
-                                                                    readOnly=""
-                                                                />
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colSpan={4} />
-                                                            <td className="border-b border-slate-200 px-3.5 py-2.5 text-slate-500 dark:text-zink-200 dark:border-zink-500">
-                                                                Item Discounts
-                                                            </td>
-                                                            <td className="font-medium border-b border-slate-200 dark:border-zink-500 text-slate-500">
-                                                                <input
-                                                                    type="text"
-                                                                    id="itemDiscounts"
-                                                                    className="px-3.5 py-2.5 border-none form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200 cart-discount"
-                                                                    placeholder="-$00.00"
-                                                                    readOnly=""
-                                                                />
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colSpan={4} />
-                                                            <td className="border-b border-slate-200 px-3.5 py-2.5 text-slate-500 dark:text-zink-200 dark:border-zink-500">
-                                                                Shipping Charge
-                                                            </td>
-                                                            <td className="font-medium border-b border-slate-200 dark:border-zink-500">
-                                                                <input
-                                                                    type="text"
-                                                                    id="shippingCharge"
-                                                                    className="px-3.5 py-2.5 border-none form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200 cart-shipping"
-                                                                    placeholder="$00.00"
-                                                                    readOnly=""
-                                                                />
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colSpan={4} />
-                                                            <td className="border-b border-slate-200 px-3.5 py-2.5 text-slate-500 dark:text-zink-200 dark:border-zink-500">
-                                                                Total Amount
-                                                            </td>
-                                                            <td className="font-medium border-b border-slate-200 dark:border-zink-500">
-                                                                <input
-                                                                    type="text"
-                                                                    id="totalAmount"
-                                                                    className="px-3.5 py-2.5 border-none form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200 cart-total"
-                                                                    placeholder="$00.00"
-                                                                    readOnly=""
-                                                                />
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
                                                 </table>
                                             </div>
                                             <h6 className="my-5 underline text-16">Payments Details:</h6>
