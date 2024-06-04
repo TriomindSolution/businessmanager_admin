@@ -35,6 +35,7 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
     product_total: "",
     size: "",
     color: "",
+    sub_total:0
   });
 
   /***Fetching Item Data Start */
@@ -53,7 +54,7 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
 
   useEffect(() => {
     fetchItemList();
-    return () => {};
+    
   }, []);
   console.log(itemList.data);
   /***Fetching ExpenseCategory Data end */
@@ -79,12 +80,13 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
     {
       id: "",
       quantity: 0,
-      price: "",
-      discount: "",
-      tax: "",
-      total: "",
+      price: 0,
+      discount: 0,
+      tax: 0,
+      total: 0,
       size: "",
       color: "",
+      product_total: 0,
     },
   ]);
 
@@ -109,10 +111,34 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
     setItems(newItems);
   };
 
+  const calculateSubTotal = (newItems, shippingCharge) => {
+    const subTotal = newItems.reduce((acc, item) => acc + item.product_total, 0);
+    handleOrderChange('sub_total', subTotal);
+    const totalAmount = subTotal + parseFloat(shippingCharge || 0);
+    handleOrderChange('total_amount', totalAmount);
+  };
+  
+  const handleShippingChargeChange = (value) => {
+    setOrder((prevOrder) => ({
+      ...prevOrder,
+      shipping_charge: value,
+    }));
+    calculateSubTotal(items, value); // Recalculate subtotal with the new shipping charge
+  };
+  
   const handleChange = (index, field, value) => {
     const newItems = [...items];
     newItems[index][field] = value;
+  
+    // Recalculate product total for the row
+    const { quantity, price, discount, tax } = newItems[index];
+    const discountAmount = (price * discount) / 100;
+    const productTotal = quantity * price - discountAmount + parseFloat(tax || 0);
+  
+    newItems[index].product_total = productTotal;
     setItems(newItems);
+  
+    calculateSubTotal(newItems, order.shipping_charge); // Update subtotal
   };
 
   const handleOrderChange = (field, value) => {
@@ -125,14 +151,15 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
     const orderPayload = {
       ...order,
       productVariants: items.map((item) => ({
-        product_id: 2,
+        product_id: 25,
         quantity: item.quantity,
         price: item.price,
         discount: item.discount,
         tax: item.tax,
-        product_total: item.total,
+        product_total:0,
         size: item.size,
         color: item.color,
+        sub_total: 0,
       })),
     };
 
@@ -143,33 +170,19 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
       notify("error", response.data.message);
     }
   };
-  const calculateSubtotal = () => {
-    return items
-      .reduce((total, item) => total + (item.quantity * item.price || 0), 0)
-      .toFixed(2);
-  };
+  
 
-  const calculateDiscount = () => {
-    return items
-      .reduce(
-        (total, item) =>
-          total + (item.quantity * item.price * (item.discount / 100) || 0),
-        0
-      )
-      .toFixed(2);
-  };
 
-  const calculateTax = () => {
-    const subtotal = calculateSubtotal();
-    return (subtotal * 0.18).toFixed(2);
-  };
 
-  const calculateTotal = () => {
-    const subtotal = calculateSubtotal();
-    const discount = calculateDiscount();
-    const tax = calculateTax();
-    return (subtotal - discount + tax).toFixed(2);
-  };
+
+
+
+
+ 
+
+ 
+
+
 
   return (
     <>
@@ -304,10 +317,10 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
             required
           >
             <option value="" disabled>Select Status</option>
-            <option value="Paid">Paid</option>
-            <option value="Unpaid">Unpaid</option>
-            <option value="Cancel">Cancel</option>
-            <option value="Refund">Refund</option>
+            <option value="0">Paid</option>
+            <option value="1">Unpaid</option>
+            <option value="2">Cancel</option>
+            <option value="3">Refund</option>
           </select>
                         </div>
                        
@@ -346,92 +359,87 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
                             id="itemBody"
                           >
                             {items.map((item, index) => (
-                              <tr className="item" key={index}>
-                                <td className="border border-slate-200 dark:border-zinc-500">
-                                  <select
-                                    name="name"
-                                    id={`itemName-${index}`}
-                                    className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                                    value={"sadik"}
-                                    // onChange={(e) =>
-                                    //   handleChange(index, "id", e.target.value)
-                                    // }
-                                  
-                                  >
-                                    <option value="" disabled>
-                                      Choose an Item
-                                    </option>
-                                    {Array.isArray(itemList) &&
-                                      itemList.map((item) => (
-                                        <option
-                                          key={item.data.id}
-                                          value={item.data.id}
-                                        >
-                                          {item.data.name}
-                                        </option>
-                                      ))}
-                                  </select>
-                                </td>
-                                <td className="w-40 border border-slate-200 dark:border-zinc-500">
-                                  <div className="flex justify-center text-center input-step">
-                                    <input
-                                      type="number"
-                                      className="item-quantity"
-                                      min={0}
-                                      max={100}
-                                      value={item.quantity}
-                                      onChange={(e) => handleChange(index, 'quantity', e.target.value)}
+  <tr className="item" key={index}>
+    <td className="border border-slate-200 dark:border-zinc-500">
+      <select
+        name="name"
+        id={`itemName-${index}`}
+        className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+        value={item.product_id}
+        onChange={(e) => handleChange(index, "product_id", e.target.value)}
+      >
+        <option value="" disabled>
+          Choose an Item
+        </option>
+        {Array.isArray(itemList) &&
+          itemList.map((item) => (
+            <option key={item.data.id} value={item.data.id}>
+              {item.data.name}
+            </option>
+          ))}
+      </select>
+    </td>
+    <td className="w-40 border border-slate-200 dark:border-zinc-500">
+      <div className="flex justify-center text-center input-step">
+        <input
+          type="number"
+          className="item-quantity"
+          min={0}
+          max={100}
+          value={item.quantity}
+          onChange={(e) => handleChange(index, 'quantity', parseInt(e.target.value))}
+        />
+      </div>
+    </td>
+    <td className="w-40 border border-slate-200 dark:border-zinc-500">
+      <input
+        type="number"
+        className="item-price"
+        placeholder="$00.00"
+        value={item.price}
+        onChange={(e) => handleChange(index, 'price', parseFloat(e.target.value))}
+      />
+    </td>
+    <td className="w-40 border border-slate-200 dark:border-zinc-500">
+      <input
+        type="text"
+        className="item-discount"
+        placeholder="0%"
+        value={item.discount}
+        onChange={(e) => handleChange(index, 'discount', parseFloat(e.target.value))}
+        required
+      />
+    </td>
+    <td className="w-40 border border-slate-200 dark:border-zinc-500">
+      <input
+        type="text"
+        className="item-tax"
+        placeholder="0%"
+        value={item.tax}
+        onChange={(e) => handleChange(index, 'tax', parseFloat(e.target.value))}
+        required
+      />
+    </td>
+    <td className="border border-slate-200 dark:border-zinc-500">
+      <input
+        type="text"
+        className="cart-total"
+        value={item.product_total}
+        readOnly
+      />
+    </td>
+    <td className="border border-slate-200 dark:border-zinc-500 px-6 py-1.5">
+      <button
+        type="button"
+        className="product-removal"
+        onClick={() => handleRemoveItem(index)}
+      >
+        Delete
+      </button>
+    </td>
+  </tr>
+))}
 
-                                    />
-                                  </div>
-                                </td>
-                                <td className="w-40 border border-slate-200 dark:border-zinc-500">
-                                  <input
-                                    type="number"
-                                    className="item-price"
-                                    placeholder="$00.00"
-                                    onChange={(e) => handleChange(index, 'price', e.target.value)}
-                                    value={item.price}
-                                  />
-                                </td>
-                                <td className="w-40 border border-slate-200 dark:border-zinc-500">
-                                  <input
-                                    type="text"
-                                    className="item-discount"
-                                    placeholder="0%"
-                                    value={item.discount}
-                                    onChange={(e) => handleChange(index, 'discount', e.target.value)}
-                                    required
-                                  />
-                                </td>
-                                <td className="w-40 border border-slate-200 dark:border-zinc-500">
-                                  <input
-                                    type="text"
-                                    className="item-text"
-                                    placeholder="0%"
-                                    value={item.tax}
-                                    onChange={(e) => handleChange(index, 'tax', e.target.value)}
-                                    required
-                                  />
-                                </td>
-                                <td className="border border-slate-200 dark:border-zinc-500">
-                                  <input
-                                    type="text"
-                                    className="cart-discount"
-                                    placeholder="-$00.00"
-                                  />
-                                </td>
-                                <td className="border border-slate-200 dark:border-zinc-500 px-6 py-1.5">
-                                  <button
-                                    type="button"
-                                    className="product-removal"
-                                    onClick={() => handleRemoveItem(index)}
-                                  >
-                                    Delete
-                                  </button>
-                                </td>
-                              </tr>
-                            ))}
                           </tbody>
                           <tbody>
                             <tr>
@@ -463,49 +471,25 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
                                   id="subTotale"
                                   className="px-3.5 py-2.5 border-none form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200 cart-subtotal"
                                   placeholder="$00.00"
+                                  value={order.sub_total}
+                                  readOnly
                                 />
                               </td>
                             </tr>
-                            <tr>
-                              <td colSpan={4} />
-                              <td className="border-b border-slate-200 px-3.5 py-2.5 text-slate-500 dark:text-zink-200 dark:border-zink-500">
-                                Estimated Tax (18%)
-                              </td>
-                              <td className="font-medium border-b border-slate-200 dark:border-zink-500">
-                                <input
-                                  type="text"
-                                  id="estimatedTax"
-                                  className="px-3.5 py-2.5 border-none form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200 cart-tax"
-                                  placeholder="$00.00"
-                                />
-                              </td>
-                            </tr>
-                            <tr>
-                              <td colSpan={4} />
-                              <td className="border-b border-slate-200 px-3.5 py-2.5 text-slate-500 dark:text-zink-200 dark:border-zink-500">
-                                Item Discounts
-                              </td>
-                              <td className="font-medium border-b border-slate-200 dark:border-zink-500 text-slate-500">
-                                <input
-                                  type="text"
-                                  id="itemDiscounts"
-                                  className="px-3.5 py-2.5 border-none form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200 cart-discount"
-                                  placeholder="-$00.00"
-                                />
-                              </td>
-                            </tr>
+                  
                             <tr>
                               <td colSpan={4} />
                               <td className="border-b border-slate-200 px-3.5 py-2.5 text-slate-500 dark:text-zink-200 dark:border-zink-500">
                                 Shipping Charge
                               </td>
                               <td className="font-medium border-b border-slate-200 dark:border-zink-500">
-                                <input
-                                  type="text"
-                                  id="shippingCharge"
-                                  className="px-3.5 py-2.5 border-none form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200 cart-shipping"
-                                  placeholder="$00.00"
-                                />
+                              <input
+                                   type="text"
+                                   id="shippingCharge"
+                                   className="px-3.5 py-2.5 border-none form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200 cart-shipping"
+                                   value={order.shipping_charge}
+                                    onChange={(e) => handleShippingChargeChange(parseFloat(e.target.value))}
+                                 />
                               </td>
                             </tr>
                             <tr>
@@ -514,11 +498,12 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
                                 Total Amount
                               </td>
                               <td className="font-medium border-b border-slate-200 dark:border-zink-500">
-                                <input
+                              <input
                                   type="text"
                                   id="totalAmount"
                                   className="px-3.5 py-2.5 border-none form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200 cart-total"
-                                  placeholder="$00.00"
+                                  value={order.total_amount}
+                                  readOnly
                                 />
                               </td>
                             </tr>
