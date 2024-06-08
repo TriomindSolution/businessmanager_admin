@@ -12,7 +12,8 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
     ToastMessage({ type, message });
   }, []);
   const [itemList, setItemList] = useState([]);
-
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [itemOption, setItemOption] = useState([]);
   const [loading, setLoading] = useState(false);
   const [order, setOrder] = useState({
@@ -22,17 +23,17 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
     payment: "",
     payment_method: "",
     payment_from: "",
-    shipping_charge: "",
-    total_amount: "",
+    shipping_charge: 0,
+    total_amount: 0,
     name: "",
     phone: "",
     address_1: "",
     product_id: "",
-    quantity: "",
-    price: "",
-    discount: "",
-    tax: "",
-    product_total: "",
+    quantity: 0,
+    price: 0,
+    discount: 0,
+    tax: 0,
+    product_total: 0,
     size: "",
     color: "",
     sub_total: 0,
@@ -44,7 +45,7 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
     try {
       const response = await http.get(PRODUCT_END_POINT.list());
 
-      setItemList(response.data?.data);
+      setItemList(response.data?.data?.data);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching item list:", error);
@@ -55,7 +56,8 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
   useEffect(() => {
     fetchItemList();
   }, []);
-  console.log(itemList.data);
+
+  console.log(itemList);
   /***Fetching ExpenseCategory Data end */
 
   //  /**Items dropdown */
@@ -130,12 +132,15 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
 
   const handleChange = (index, field, value) => {
     const newItems = [...items];
-    newItems[index][field] = value;
+    newItems[index][field] = value || 0;
 
     const { quantity, price, discount, tax } = newItems[index];
-    const discountAmount = (price * discount) / 100;
+    const discountAmount =
+      (parseFloat(price || 0) * parseFloat(discount || 0)) / 100;
     const productTotal =
-      quantity * price - discountAmount + parseFloat(tax || 0);
+      parseFloat(quantity || 0) * parseFloat(price || 0) -
+      discountAmount +
+      parseFloat(tax || 0);
 
     newItems[index].product_total = productTotal;
     setItems(newItems);
@@ -168,7 +173,7 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
     const orderPayload = {
       ...order,
       productVariants: items.map((item) => ({
-        product_id: 25,
+        product_id: item.id,
         quantity: item.quantity,
         price: item.price,
         discount: item.discount,
@@ -184,6 +189,22 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
       notify("success", response.data.message);
     } else {
       notify("error", response.data.message);
+    }
+  };
+
+  const handleSearchChange = async (e) => {
+    setSearchQuery(e.target.value);
+    if (e.target.value.length > 0) {
+      try {
+        const response = await http.get(
+          `${PRODUCT_END_POINT.search()}?query=${e.target.value}`
+        );
+        setSearchResults(response.data?.data);
+      } catch (error) {
+        console.error("Error fetching search results:", error);
+      }
+    } else {
+      setSearchResults([]);
     }
   };
 
@@ -375,29 +396,23 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
                                     name="name"
                                     id={`itemName-${index}`}
                                     className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                                    value={item.product_id}
+                                    value={item.id}
                                     onChange={(e) =>
-                                      handleChange(
-                                        index,
-                                        "product_id",
-                                        e.target.value
-                                      )
+                                      handleChange(index, "id", e.target.value)
                                     }
                                   >
                                     <option value="" disabled>
                                       Choose an Item
                                     </option>
-                                    {Array.isArray(itemList) &&
-                                      itemList.map((item) => (
-                                        <option
-                                          key={item.data.id}
-                                          value={item.data.id}
-                                        >
-                                          {item.data.name}
-                                        </option>
-                                      ))}
+                                    {itemList.map((item) => (
+                                      <option key={item.id} value={item.id}>
+                                        {item.name}
+                                      </option>
+                                    ))}
                                   </select>
                                 </td>
+
+                                
                                 <td className="w-40 border border-slate-200 dark:border-zinc-500">
                                   <div className="flex justify-center text-center input-step">
                                     <input
@@ -415,7 +430,9 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
                                       }
                                     />
                                   </div>
+                                  
                                 </td>
+                                
                                 <td className="w-40 border border-slate-200 dark:border-zinc-500">
                                   <input
                                     type="number"
@@ -433,7 +450,7 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
                                 </td>
                                 <td className="w-40 border border-slate-200 dark:border-zinc-500">
                                   <input
-                                    type="text"
+                                    type="number"
                                     className="item-discount"
                                     placeholder="0%"
                                     value={item.discount}
@@ -449,7 +466,7 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
                                 </td>
                                 <td className="w-40 border border-slate-200 dark:border-zinc-500">
                                   <input
-                                    type="text"
+                                    type="number"
                                     className="item-tax"
                                     placeholder="0%"
                                     value={item.tax}
