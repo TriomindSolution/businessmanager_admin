@@ -391,26 +391,40 @@ const AddInvoice = ({ isOpen, onClose, setEditData, isParentRender }) => {
                           >
                             {items.map((item, index) => (
                               <tr className="item" key={index}>
-                                <td className="border border-slate-200 dark:border-zinc-500">
-                                  <select
-                                    name="name"
-                                    id={`itemName-${index}`}
-                                    className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                                    value={item.id}
-                                    onChange={(e) =>
-                                      handleChange(index, "id", e.target.value)
-                                    }
-                                  >
-                                    <option value="" disabled>
-                                      Choose an Item
-                                    </option>
-                                    {itemList.map((item) => (
-                                      <option key={item.id} value={item.id}>
-                                        {item.name}
-                                      </option>
-                                    ))}
-                                  </select>
-                                </td>
+                            <td className="border border-slate-200 dark:border-zinc-500">
+  <select
+    name="name"
+    id={`itemName-${index}`}
+    className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+    value={item.id}
+    onChange={(e) => handleChange(index, "id", e.target.value)}
+  >
+    <option value="" disabled>
+      Choose an Item
+    </option>
+    {itemList.map((item) => (
+      <option key={item.id} value={item.id}>
+        {item.name}
+      </option>
+    ))}
+  </select>
+  {item.hasVariants && (
+    <div>
+      <input
+        type="text"
+        placeholder="Enter Size"
+        value={items[index].size}
+        onChange={(e) => handleChange(index, "size", e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Enter Color"
+        value={items[index].color}
+        onChange={(e) => handleChange(index, "color", e.target.value)}
+      />
+    </div>
+  )}
+</td>
 
                                 
                                 <td className="w-40 border border-slate-200 dark:border-zinc-500">
