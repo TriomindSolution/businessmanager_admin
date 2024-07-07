@@ -7,7 +7,7 @@ import Link from "next/link";
 import React, { useEffect, useState, useCallback } from "react";
 import DataTable from "react-data-table-component";
 // import CustomerForm from "./CustomerForm";
-import { ORDER_END_POINT } from "@/constants/api_endpoints/orderEndPoints";
+import { CUSTOMER_END_POINT } from "@/constants/api_endpoints/orderEndPoints";
 // import DeleterCustomer from "./DeleterCustomer";
 const Customer = () => {
 
@@ -18,7 +18,7 @@ const Customer = () => {
         ToastMessage({ type, message });
     }, []);
     const [orderList, setOrderList] = useState([]);
-    console.log("customerList", orderList)
+    console.log("customerList", customerList)
     const [loading, setLoading] = useState(true);
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
@@ -85,7 +85,7 @@ const Customer = () => {
     const fetchOrderList = async () => {
         try {
             const response = await http.get(ORDER_END_POINT.list());
-            setOrderList(response.data?.data);
+            setCustomerList(response.data?.data);
             setLoading(false);
         } catch (error) {
             console.error('Error fetching seller list:', error);
@@ -93,10 +93,8 @@ const Customer = () => {
         }
     };
 
-    console.log(orderList);
-
     useEffect(() => {
-        fetchOrderList();
+        fetchCustomerList();
         return () => {
         };
     }, []);
@@ -112,24 +110,24 @@ const Customer = () => {
         },
         {
             name: "Name",
-            selector: (row) => row.invoice_no,
+            selector: (row) => row.name,
             sortable: true,
         },
 
         {
             name: "Phone",
-            selector: (row) => row?.order_customer?.name,
+            selector: (row) => row.phone,
             sortable: true,
         },
         {
             name: "Address 1",
-            selector: (row) => row?.address_1,
+            selector: (row) => row.address_1,
             sortable: true,
         },
 
         {
             name: "Address 2",
-            selector: (row) => row?.address_2,
+            selector: (row) => row.address_2,
             sortable: true,
         },
      
@@ -217,7 +215,7 @@ const Customer = () => {
 
                                         <DataTable
                                             columns={columns}
-                                            data={orderList}
+                                            data={customerList}
                                             pagination
                                             highlightOnHover
                                             subHeader
@@ -243,8 +241,8 @@ const Customer = () => {
 
 
         </div>
-       
-        {/* <DeleterCustomer isOpen={isDeleteModalOpen} onClose={closeDeleteModal} data={editData} isParentRender={reFetchHandler} /> */}
+        <CustomerForm isOpen={isModalOpen} onClose={closeModal} setEditData={editData} isParentRender={reFetchHandler} />
+        <DeleterCustomer isOpen={isDeleteModalOpen} onClose={closeDeleteModal} data={editData} isParentRender={reFetchHandler} />
 
         </>
     )
