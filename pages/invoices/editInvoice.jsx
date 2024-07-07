@@ -1,13 +1,15 @@
 import DeleteIcon from "@/components/elements/DeleteIcon";
 import EditIcon from "@/components/elements/EditIcon";
 import ViewIcon from "@/components/elements/ViewIcon";
-import { ORDER_END_POINT } from "@/constants/api_endpoints/orderEndPoints";
+
 import Axios from "@/utils/axios";
 import Link from "next/link";
 import React, { useEffect, useState, useCallback } from "react";
 import DataTable from "react-data-table-component";
-
-const AllInvoice = () => {
+// import CustomerForm from "./CustomerForm";
+import { CUSTOMER_END_POINT } from "@/constants/api_endpoints/orderEndPoints";
+// import DeleterCustomer from "./DeleterCustomer";
+const Customer = () => {
 
 
     /*** Storing data start */
@@ -16,7 +18,7 @@ const AllInvoice = () => {
         ToastMessage({ type, message });
     }, []);
     const [orderList, setOrderList] = useState([]);
-    console.log("orderList", orderList)
+    console.log("customerList", customerList)
     const [loading, setLoading] = useState(true);
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
@@ -40,7 +42,6 @@ const AllInvoice = () => {
     
         /** edit function start */
         const handleEdit = (data) => {
-            console.log(data)
             setEditData(data);
             setIsModalOpen(true);
         };
@@ -75,7 +76,7 @@ const AllInvoice = () => {
 
             /**Render Function Start */
     const reFetchHandler = (isRender) => {
-        if (isRender) fetchOrderList();
+        if (isRender) fetchCustomerList();
     };
     /**Render Function end */
 
@@ -84,7 +85,7 @@ const AllInvoice = () => {
     const fetchOrderList = async () => {
         try {
             const response = await http.get(ORDER_END_POINT.list());
-            setOrderList(response.data?.data);
+            setCustomerList(response.data?.data);
             setLoading(false);
         } catch (error) {
             console.error('Error fetching seller list:', error);
@@ -93,7 +94,7 @@ const AllInvoice = () => {
     };
 
     useEffect(() => {
-        fetchOrderList();
+        fetchCustomerList();
         return () => {
         };
     }, []);
@@ -103,28 +104,37 @@ const AllInvoice = () => {
 
     const columns = [
         {
-            name: "invoice",
-            selector: (row) => row.invoice,
+            name: "SL",
+            selector: (row, index) => index + 1,
             sortable: true,
         },
         {
-            name: "invoice_date",
-            selector: (row) => row.invoice_date,
+            name: "Name",
+            selector: (row) => row.name,
+            sortable: true,
+        },
+
+        {
+            name: "Phone",
+            selector: (row) => row.phone,
             sortable: true,
         },
         {
-            name: "shipping_charge",
-            selector: (row) => row.shipping_charge,
+            name: "Address 1",
+            selector: (row) => row.address_1,
             sortable: true,
         },
+
         {
-            name: "total_amount",
-            selector: (row) => row.total_amount,
+            name: "Address 2",
+            selector: (row) => row.address_2,
             sortable: true,
         },
+     
+       
         {
-            name: "order_code",
-            selector: (row) => row.order_code,
+            name: "Created At",
+            selector: (row) => row.created_at,
             sortable: true,
         }, {
             name: "Action",
@@ -139,15 +149,14 @@ const AllInvoice = () => {
         return (
             <>
                 <ul className="action flex list-none p-0">
-                   
-                    <li className="m-2"  onClick={() => handleEdit(row)}>
+                    <li className="m-2" onClick={() => handleDelete(row)}>
+                        <DeleteIcon />
+                    </li>
+                    <li className="m-2" onClick={() => handleEdit(row)}>
                         <EditIcon />
                     </li>
                     <li  className="m-2">
                         <ViewIcon />
-                    </li>
-                    <li className="m-2" onClick={() => handleDelete(row)}>
-                        <DeleteIcon />
                     </li>
                 </ul>
             </>
@@ -169,7 +178,7 @@ const AllInvoice = () => {
                             <div className="card-body">
                                 <div className="grid items-center grid-cols-1 gap-3 mb-5 2xl:grid-cols-12">
                                     <div className="2xl:col-span-3">
-                                        <h6 className="text-15">Order</h6>
+                                        <h6 className="text-15">Customer</h6>
                                     </div>
                                     {/*end col*/}
                                     <div className="2xl:col-span-3 2xl:col-start-10">
@@ -206,18 +215,19 @@ const AllInvoice = () => {
 
                                         <DataTable
                                             columns={columns}
-                                            data={orderList}
+                                            data={customerList}
                                             pagination
                                             highlightOnHover
                                             subHeader
-                                            subHeaderComponent={
-                                                <input
-                                                    type="text"
-                                                    placeholder="search..."
-                                                    className="w-80 border-2 border-black-600 rounded-md px-3 py-1"
-                                                
-                                                />
-                                            }
+                                            // subHeaderComponent={
+                                            //     <input
+                                            //         type="text"
+                                            //         placeholder="search..."
+                                            //         className="w-25 form-control "
+                                            //     value={search}
+                                            //     onChange={(e) => setSearch(e.target.value)}
+                                            //     />
+                                            // }
                                             striped
                                         />
                                     </div>
@@ -231,9 +241,11 @@ const AllInvoice = () => {
 
 
         </div>
+        <CustomerForm isOpen={isModalOpen} onClose={closeModal} setEditData={editData} isParentRender={reFetchHandler} />
+        <DeleterCustomer isOpen={isDeleteModalOpen} onClose={closeDeleteModal} data={editData} isParentRender={reFetchHandler} />
 
         </>
     )
 }
 
-export default AllInvoice
+export default Customer
