@@ -20,6 +20,37 @@ const Products = () => {
     const [limit, setLimit] = useState(10);
     const [isViewModalOpen, setViewIsModalOpen] = useState(false);
     const [isDeleteModalOpen, setDeleteIsModalOpen] = useState(false);
+    const [editData, setEditData] = useState({});
+
+
+      /** Add start */
+  const handleAdd = () => {
+
+    setEditData(null);
+
+    router.push({
+      pathname: "../products/ProductForm",
+      query: { data: null },
+    });
+  };
+
+  /** Add end */
+
+
+    /**Job edit start */
+    const handleEdit = (data) => {
+        setEditData(data);
+ 
+        router.push({
+          pathname: "../products/ProductForm",
+          // query: { data: data },
+          query: { data: JSON.stringify(data) },
+        });
+      };
+      /**Job edit end */
+
+
+
 
     /*** Storing data end */
     const closeModal = () => {
@@ -94,11 +125,11 @@ const Products = () => {
 
     ];
 
-    const handleEdit = (row) => {
-        console.log("values", row); 
-        const queryParams = new URLSearchParams({ row: JSON.stringify(row) }).toString();
-        router.push(`/products/ProductForm?${queryParams}`);
-    };
+    // const handleEdit = (row) => {
+    //     console.log("values", row); 
+    //     const queryParams = new URLSearchParams({ row: JSON.stringify(row) }).toString();
+    //     router.push(`/products/ProductForm?${queryParams}`);
+    // };
     
     
     const actionButton = (row) => {
@@ -138,7 +169,7 @@ const Products = () => {
                                 <div className="card-body">
                                     <div className="grid items-center grid-cols-1 gap-3 mb-5 2xl:grid-cols-12">
                                         <div className="2xl:col-span-3">
-                                            <h6 className="text-15">Expense category</h6>
+                                            <h6 className="text-15">Products</h6>
                                         </div>
                                         {/*end col*/}
                                         <div className="2xl:col-span-3 2xl:col-start-10">
@@ -158,12 +189,9 @@ const Products = () => {
                                                 <button
                                                     type="button"
                                                     className="text-white btn bg-custom-500 border-custom-500 hover:text-white hover:bg-custom-600 hover:border-custom-600 focus:text-white focus:bg-custom-600 focus:border-custom-600 focus:ring focus:ring-custom-100 active:text-white active:bg-custom-600 active:border-custom-600 active:ring active:ring-custom-100 dark:ring-custom-400/20"
-                                                // onClick={handleAdd}
+                                                onClick={handleAdd}
                                                 >
-                                                    <i className="align-baseline ltr:pr-1 rtl:pl-1 ri-download-2-line" />
-                                                    <Link href="/products/ProductForm">
-                                                        Add
-                                                    </Link>
+                                                    Add
                                                 </button>
 
                                             </div>
@@ -201,7 +229,7 @@ const Products = () => {
 
 
             </div>
-            {/* <ExpenseCategoryForm isOpen={isModalOpen} onClose={closeModal} setEditData={editData} isParentRender={reFetchHandler} />
+        {/* <ExpenseCategoryForm isOpen={isModalOpen} onClose={closeModal} setEditData={editData} isParentRender={reFetchHandler} />
         <DeleteExpenseCategory isOpen={isDeleteModalOpen} onClose={closeDeleteModal} data={editData} isParentRender={reFetchHandler} /> */}
         </>
     )

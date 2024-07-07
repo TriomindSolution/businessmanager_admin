@@ -11,6 +11,7 @@ const DeleterCustomer = ({ isOpen, onClose, data, isParentRender }) => {
         ToastMessage({ type, message });
     }, []);
 
+
     const deleteData = async () => {
         try {
             const response = await http.delete(CUSTOMER_END_POINT.delete(data?.id));
@@ -29,6 +30,7 @@ const DeleterCustomer = ({ isOpen, onClose, data, isParentRender }) => {
             notify('error', error.message);
         }
     }
+    
   return (
     <>
     <div

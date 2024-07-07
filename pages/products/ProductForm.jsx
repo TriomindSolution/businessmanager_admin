@@ -16,10 +16,13 @@ const ProductForm = () => {
     }, []);
 
     const router = useRouter();
-    const { row } = router.query;
-    const rowData = row ? JSON.parse(row) : null;
+    // const { row } = router.query;
+    // const rowData = row ? JSON.parse(row) : null;
 
-    console.log("rowData", rowData);
+    const [editData, setEditData] = useState(false);
+    const { data } = router.query;
+    const parsedData = JSON.parse(data);
+    console.log("Parsed Data", parsedData);
 
     const [loading, setLoading] = useState(false);
     const [categoryList, setCategoryList] = useState([]);
@@ -31,15 +34,56 @@ const ProductForm = () => {
         per_unit_product_price: null,
         product_unit: null,
         stock_alert: null,
-        category_id:null,
-        seller_id:null,
-        product_quantity:null,
-        total_price:null,
-        product_details:'',
-        product_sku_code:'',
-        date:'',
+        category_id: null,
+        seller_id: null,
+        product_quantity: null,
+        total_price: null,
+        product_details: '',
+        product_sku_code: '',
+        date: '',
         status: "",
     });
+    const [variants, setVariants] = useState([
+        { size: '', color: '', quantity: '' }
+    ]);
+
+
+    useEffect(() => {
+        if (data === null) {
+            setEditData(false);
+        } else {
+            try {
+                setEditData(true);
+                setProduct({
+                    id: parsedData?.id,
+                    name: parsedData?.name,
+                    per_unit_product_price: parsedData?.per_unit_product_price,
+                    product_unit: parsedData?.product_unit,
+                    stock_alert: parsedData?.stock_alert,
+                    category_id: parsedData?.category_id,
+                    seller_id: parsedData?.seller_id,
+                    product_quantity: parsedData?.product_quantity,
+                    total_price: parsedData?.total_price,
+                    product_details: parsedData?.product_details,
+                    product_sku_code: parsedData?.product_sku_code,
+                    date: parsedData?.date,
+                    status: parsedData?.status,
+                });
+
+                // Set variants state
+                const formattedVariants = parsedData?.product_variants.map(variant => ({
+                    id:variant.id,
+                    size: variant.size,
+                    color: variant.color,
+                    quantity: variant.quantity
+                }));
+                setVariants(formattedVariants);
+            } catch (error) {
+                console.error("Error parsing JSON data:", error);
+            }
+        }
+    }, [data]);
+
 
 
     /***Fetching ExpenseCategory Data Start */
@@ -81,13 +125,6 @@ const ProductForm = () => {
 
 
     /**fetch Category dropdown list  End */
-
-
-
-
-
-
-
 
 
 
@@ -145,16 +182,8 @@ const ProductForm = () => {
     };
 
 
-console.log(product);
 
 
-
-
-
-
-    const [variants, setVariants] = useState([
-        { size: '', color: '', quantity: '' }
-    ]);
 
     const handleChangeVariants = (index, e) => {
         const { name, value } = e.target;
@@ -167,28 +196,105 @@ console.log(product);
         setVariants([...variants, { size: '', color: '', quantity: '' }]);
     };
 
-    const removeVariant = index => {
-        const updatedVariants = [...variants];
-        updatedVariants.splice(index, 1);
-        setVariants(updatedVariants);
+    const removeVariant =async (index,variant) => {
+        // const updatedVariants = [...variants];
+        // updatedVariants.splice(index, 1);
+        // setVariants(updatedVariants);
+        console.log(variant)
+
+
+        try {
+            const response = await http.delete(PRODUCT_END_POINT.productDelele(variant?.id));
+            console.log("response", response);
+            
+            if (response.data.status === true) {
+                notify('success', response.data.message);
+        //         const updatedVariants = [...variants];
+        // updatedVariants.splice(index, 1);
+        // setVariants(updatedVariants);
+                // onClose();
+            } else {
+                notify('error', response.data.message);
+            }
+        } catch (error) {
+            notify('error', error.message);
+        }
+
+
     };
 
 
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     if (product?.id) {
+    //         const response = await http.post(PRODUCT_END_POINT.update(product?.id), product, variants);
+    //         if (response.data.status === true) {
+    //             notify('success', response.data.message);
+
+    //         } else {
+    //             notify('error', response.data.message);
+    //         }
+
+    //     } else {
+    //         const response = await http.post(PRODUCT_END_POINT.create(), product, variants);
+    //         if (response.data.status === true) {
+    //             notify('success', response.data.message);
+
+    //         } else {
+    //             notify('error', response.data.message);
+    //         }
+    //     }
+
+    // }
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        console.log(product, variants)
-
-        const response = await http.post(PRODUCT_END_POINT.create(), product, variants);
-                if (response.data.status === true) {
-                    notify('success', response.data.message);
-                    
-                } else {
-                    notify('error', response.data.message);
-                }
-
-    }
+    
+        // Combine product and variants into a single object with correct field names
+        const payload = {
+            category_id: product.category_id,
+            seller_id: product.seller_id,
+            name: product.name,
+            per_unit_product_price: product.per_unit_product_price,
+            product_unit: product.product_unit,
+            product_quantity: product.product_quantity,
+            total_price: product.total_price,
+            stock_alert: product.stock_alert,
+            product_details: product.product_details,
+            status: product.status,
+            date: product.date,
+            product_sku_code: product.product_sku_code,
+            variants: variants.map(variant => ({
+                id: variant.id,
+                size: variant.size,
+                color: variant.color,
+                quantity: variant.quantity
+            }))
+        };
+    
+        try {
+            let response;
+            if (product?.id) {
+                response = await http.put(PRODUCT_END_POINT.update(product?.id), payload);
+            } else {
+                response = await http.post(PRODUCT_END_POINT.create(), payload);
+            }
+    
+            if (response.data.status === true) {
+                notify('success', response.data.message);
+                router.push('/products')
+            } else {
+                notify('error', response.data.message);
+            }
+        } catch (error) {
+            notify('error', 'An error occurred while submitting the data.');
+            console.error("Error submitting data:", error);
+        }
+    };
+    
+    
     return (
         <>
             <div
@@ -497,10 +603,6 @@ console.log(product);
                                                 <div className="2xl:col-span-3 2xl:col-start-10">
                                                     <div className="flex gap-3">
 
-
-
-
-
                                                         <button
                                                             type="button"
                                                             className="text-white btn bg-custom-500 border-custom-500 hover:text-white hover:bg-custom-600 hover:border-custom-600 focus:text-white focus:bg-custom-600 focus:border-custom-600 focus:ring focus:ring-custom-100 active:text-white active:bg-custom-600 active:border-custom-600 active:ring active:ring-custom-100 dark:ring-custom-400/20"
@@ -560,7 +662,7 @@ console.log(product);
                                                                 onChange={e => handleChangeVariants(index, e)}
                                                             />
                                                             {index !== 0 && (
-                                                                <button onClick={() => removeVariant(index)} className="flex items-center text-red-500">
+                                                                <button onClick={() => removeVariant(index,variant)} className="flex items-center text-red-500">
                                                                     <FontAwesomeIcon icon={faTrashAlt} className="mr-2" />
                                                                 </button>
                                                             )}
@@ -568,6 +670,7 @@ console.log(product);
                                                     </div>
                                                 </div>
                                             ))}
+
 
 
                                         </div>
