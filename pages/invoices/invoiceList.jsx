@@ -85,7 +85,7 @@ const Customer = () => {
     const fetchOrderList = async () => {
         try {
             const response = await http.get(ORDER_END_POINT.list());
-            setOrderList(response.data?.data);
+            setOrderList(response.data?.data?.data);
             setLoading(false);
         } catch (error) {
             console.error('Error fetching seller list:', error);
@@ -112,13 +112,13 @@ const Customer = () => {
         },
         {
             name: "Name",
-            selector: (row) => row.invoice_no,
+            selector: (row) => row?.order_customer?.name,
             sortable: true,
         },
 
         {
             name: "Phone",
-            selector: (row) => row?.order_customer?.name,
+            selector: (row) => row.invoice_no,
             sortable: true,
         },
         {
@@ -220,17 +220,7 @@ const Customer = () => {
                                             data={orderList}
                                             pagination
                                             highlightOnHover
-                                            subHeader
-                                            // subHeaderComponent={
-                                            //     <input
-                                            //         type="text"
-                                            //         placeholder="search..."
-                                            //         className="w-25 form-control "
-                                            //     value={search}
-                                            //     onChange={(e) => setSearch(e.target.value)}
-                                            //     />
-                                            // }
-                                            striped
+                                            
                                         />
                                     </div>
                                 </div>
@@ -244,7 +234,6 @@ const Customer = () => {
 
         </div>
        
-        {/* <DeleterCustomer isOpen={isDeleteModalOpen} onClose={closeDeleteModal} data={editData} isParentRender={reFetchHandler} /> */}
 
         </>
     )
